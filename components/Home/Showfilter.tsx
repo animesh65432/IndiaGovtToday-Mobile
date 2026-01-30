@@ -74,7 +74,6 @@ const ShowFilter: React.FC<Props> = ({
         transform: [{ translateY: translateY.value }],
     }));
 
-    if (!ShowFilterCard) return null;
 
     return (
         <Modal
@@ -85,12 +84,10 @@ const ShowFilter: React.FC<Props> = ({
             onRequestClose={onClose}
         >
             <View style={styles.container}>
-                {/* Backdrop */}
                 <Pressable style={styles.backdropPressable} onPress={onClose}>
                     <Animated.View style={[styles.backdrop, backdropStyle]} />
                 </Pressable>
 
-                {/* Modal Content */}
                 <Animated.View style={[styles.modalContent, modalStyle]}>
                     {/* Drag Indicator */}
                     <View style={styles.dragIndicator} />

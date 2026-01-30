@@ -1,42 +1,62 @@
 import { lanContext } from '@/context/lan';
 import { TranslateText } from "@/lib/translatetext";
+import { Search } from 'lucide-react-native';
 import React, { useContext } from 'react';
-import { StyleSheet, TextInput } from 'react-native';
+import { StyleSheet, TextInput, View } from 'react-native';
 
 type Props = {
     visible: boolean;
     setVisible: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const InputToggle: React.FC<Props> = ({ setVisible, visible }) => {
-
+const InputToggle: React.FC<Props> = ({ setVisible }) => {
     const { lan } = useContext(lanContext);
 
     const handlePress = () => {
-        setVisible((prev) => !prev);
+        setVisible(true);
     };
 
     return (
-        <TextInput
-            onPress={handlePress}
-            style={styles.Input}
-            onChange={handlePress}
-            placeholder={TranslateText[lan].INPUT_PLACEHOLDER}
-        />
+        <View style={styles.InputContainer}>
+            <Search
+                size={20}
+                color="#666"
+                style={styles.SearchIcon}
+            />
+            <TextInput
+                style={styles.Input}
+                placeholder={TranslateText[lan].INPUT_PLACEHOLDER}
+                placeholderTextColor="#999"
+                onChange={handlePress}
+            />
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
-    Input: {
+    InputContainer: {
         width: "90%",
-        height: 20,
-        backgroundColor: "#FFFFFF",
         marginLeft: "auto",
         marginRight: "auto",
-        padding: 20,
+        position: "relative",
+        justifyContent: "center",
+    },
+    Input: {
+        width: "100%",
+        height: 50,
+        backgroundColor: "#FFFFFF",
+        paddingVertical: 12,
+        paddingLeft: 45, // Space for icon
+        paddingRight: 15,
         fontFamily: "Montserrat_400Regular",
         borderRadius: 10,
-    }
+        fontSize: 14,
+    },
+    SearchIcon: {
+        position: "absolute",
+        left: 15,
+        zIndex: 1,
+    },
 });
 
 export default InputToggle;

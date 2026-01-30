@@ -3,8 +3,7 @@ import { Currentdate } from '@/context/Currentdate';
 import { lanContext } from '@/context/lan';
 import { TranslateText } from '@/lib/translatetext';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Picker } from '@react-native-picker/picker';
-import { Building2, Calendar as CalendarIcon, ChevronRight, Search } from 'lucide-react-native';
+import { Building2, Calendar as CalendarIcon, ChevronRight, MapPin, Search } from 'lucide-react-native';
 import React, { useContext, useEffect, useState } from 'react';
 import {
     Platform,
@@ -39,6 +38,7 @@ const MobileSearchInputbox: React.FC<MobileSearchInputboxProps> = ({
     const [showStartDatePicker, setShowStartDatePicker] = useState(false);
     const [showEndDatePicker, setShowEndDatePicker] = useState(false);
     const [showRegionPicker, setShowRegionPicker] = useState(false);
+    const [showDepartmentPicker, setShowDepartmentPicker] = useState(false);
 
     const { lan } = useContext(lanContext);
     const { onChangeStartDate, startdate, endDate, onChangeEndDate } = useContext(Currentdate);
@@ -64,6 +64,11 @@ const MobileSearchInputbox: React.FC<MobileSearchInputboxProps> = ({
         }
     };
 
+    const handleDepartmentSelect = (dept: string) => {
+        SetDeparmentsSelected(dept);
+        setShowDepartmentPicker(false);
+    };
+
     const handleStartDateChange = (event: any, selectedDate?: Date) => {
         setShowStartDatePicker(false);
         if (selectedDate) {
@@ -76,6 +81,11 @@ const MobileSearchInputbox: React.FC<MobileSearchInputboxProps> = ({
         if (selectedDate) {
             onChangeEndDate(selectedDate);
         }
+    };
+
+    const getSelectedDepartmentLabel = () => {
+        if (!DeparmentsSelected) return TranslateText[lan].ALL_DEPARMENTS;
+        return DeparmentsSelected;
     };
 
     return (
@@ -107,10 +117,14 @@ const MobileSearchInputbox: React.FC<MobileSearchInputboxProps> = ({
             <View style={styles.section}>
                 <Text style={styles.label}>{TranslateText[lan].REGION}</Text>
                 <Pressable
-                    style={styles.multiSelectButton}
+                    style={styles.selectButton}
                     onPress={() => setShowRegionPicker(!showRegionPicker)}
                 >
-                    <Text style={styles.multiSelectText}>
+                    <MapPin size={18} color="#9CA3AF" style={styles.selectButtonIcon} />
+                    <Text style={[
+                        styles.selectButtonText,
+                        StatesSelected.length === 0 && styles.selectButtonPlaceholder
+                    ]}>
                         {StatesSelected.length > 0
                             ? `${StatesSelected.length} region${StatesSelected.length > 1 ? 's' : ''} selected`
                             : 'Select Regions'}
@@ -119,12 +133,12 @@ const MobileSearchInputbox: React.FC<MobileSearchInputboxProps> = ({
                 </Pressable>
 
                 {showRegionPicker && (
-                    <View style={styles.multiSelectDropdown}>
-                        <ScrollView style={styles.multiSelectScroll}>
+                    <View style={styles.dropdown}>
+                        <ScrollView style={styles.dropdownScroll}>
                             {TranslateText[lan].MULTISELECT_OPTIONS.map((option: any) => (
                                 <Pressable
                                     key={option.value}
-                                    style={styles.multiSelectOption}
+                                    style={styles.dropdownOption}
                                     onPress={() => toggleRegion(option.value)}
                                 >
                                     <View
@@ -138,7 +152,7 @@ const MobileSearchInputbox: React.FC<MobileSearchInputboxProps> = ({
                                             <Text style={styles.checkmark}>✓</Text>
                                         )}
                                     </View>
-                                    <Text style={styles.multiSelectOptionText}>
+                                    <Text style={styles.dropdownOptionText}>
                                         {option.label}
                                     </Text>
                                 </Pressable>
@@ -151,23 +165,65 @@ const MobileSearchInputbox: React.FC<MobileSearchInputboxProps> = ({
             {/* Department Select */}
             <View style={styles.section}>
                 <Text style={styles.label}>{TranslateText[lan].DEPTARTMENT}</Text>
-                <View style={styles.selectContainer}>
-                    <Building2 size={18} color="#9CA3AF" style={styles.selectIcon} />
-                    <Picker
-                        selectedValue={DeparmentsSelected}
-                        onValueChange={SetDeparmentsSelected}
-                        style={styles.picker}
-                        dropdownIconColor="#9CA3AF"
-                    >
-                        <Picker.Item
-                            label={TranslateText[lan].ALL_DEPARMENTS}
-                            value=""
-                        />
-                        {options.map((dept) => (
-                            <Picker.Item key={dept} label={dept} value={dept} />
-                        ))}
-                    </Picker>
-                </View>
+                <Pressable
+                    style={styles.selectButton}
+                    onPress={() => setShowDepartmentPicker(!showDepartmentPicker)}
+                >
+                    <Building2 size={18} color="#9CA3AF" style={styles.selectButtonIcon} />
+                    <Text style={[
+                        styles.selectButtonText,
+                        !DeparmentsSelected && styles.selectButtonPlaceholder
+                    ]}>
+                        {getSelectedDepartmentLabel()}
+                    </Text>
+                    <ChevronRight size={18} color="#9CA3AF" />
+                </Pressable>
+
+                {showDepartmentPicker && (
+                    <View style={styles.dropdown}>
+                        <ScrollView style={styles.dropdownScroll}>
+                            <Pressable
+                                style={styles.dropdownOption}
+                                onPress={() => handleDepartmentSelect('')}
+                            >
+                                <View
+                                    style={[
+                                        styles.checkbox,
+                                        !DeparmentsSelected && styles.checkboxChecked,
+                                    ]}
+                                >
+                                    {!DeparmentsSelected && (
+                                        <Text style={styles.checkmark}>✓</Text>
+                                    )}
+                                </View>
+                                <Text style={styles.dropdownOptionText}>
+                                    {TranslateText[lan].ALL_DEPARMENTS}
+                                </Text>
+                            </Pressable>
+                            {options.map((dept) => (
+                                <Pressable
+                                    key={dept}
+                                    style={styles.dropdownOption}
+                                    onPress={() => handleDepartmentSelect(dept)}
+                                >
+                                    <View
+                                        style={[
+                                            styles.checkbox,
+                                            DeparmentsSelected === dept && styles.checkboxChecked,
+                                        ]}
+                                    >
+                                        {DeparmentsSelected === dept && (
+                                            <Text style={styles.checkmark}>✓</Text>
+                                        )}
+                                    </View>
+                                    <Text style={styles.dropdownOptionText}>
+                                        {dept}
+                                    </Text>
+                                </Pressable>
+                            ))}
+                        </ScrollView>
+                    </View>
+                )}
             </View>
 
             {/* Date Range */}
@@ -272,8 +328,8 @@ const styles = StyleSheet.create({
         color: '#111827',
     },
 
-    // Multi-Select
-    multiSelectButton: {
+    // Unified Select Button (for both Region and Department)
+    selectButton: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -282,12 +338,21 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         paddingHorizontal: 16,
     },
-    multiSelectText: {
+    selectButtonIcon: {
+        marginRight: 12,
+    },
+    selectButtonText: {
+        flex: 1,
         fontSize: 14,
         fontWeight: '600',
         color: '#111827',
     },
-    multiSelectDropdown: {
+    selectButtonPlaceholder: {
+        color: '#9CA3AF',
+    },
+
+    // Unified Dropdown (for both Region and Department)
+    dropdown: {
         marginTop: 8,
         backgroundColor: '#FFFFFF',
         borderRadius: 16,
@@ -301,10 +366,10 @@ const styles = StyleSheet.create({
         shadowRadius: 12,
         elevation: 5,
     },
-    multiSelectScroll: {
+    dropdownScroll: {
         padding: 8,
     },
-    multiSelectOption: {
+    dropdownOption: {
         flexDirection: 'row',
         alignItems: 'center',
         padding: 12,
@@ -328,28 +393,9 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontWeight: '700',
     },
-    multiSelectOptionText: {
+    dropdownOptionText: {
         fontSize: 14,
         fontWeight: '600',
-        color: '#111827',
-    },
-
-    // Department Select
-    selectContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        height: 56,
-        backgroundColor: '#F9FAFB',
-        borderRadius: 16,
-        paddingLeft: 16,
-        overflow: 'hidden',
-    },
-    selectIcon: {
-        marginRight: 12,
-    },
-    picker: {
-        flex: 1,
-        height: 56,
         color: '#111827',
     },
 
