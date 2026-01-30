@@ -1,3 +1,4 @@
+import { TextGenerateEffect } from "@/components/ui/Textgenerateeffect"
 import { lanContext } from '@/context/lan'
 import { TranslateText } from "@/lib/translatetext"
 import React, { useContext } from 'react'
@@ -9,7 +10,11 @@ const HeadingAndTitle: React.FC = () => {
         <View style={styles.container}>
             <View style={styles.TextTitleAndDes}>
                 <Text style={styles.HeadingText}>{TranslateText[lan].PUBLIC_NOTIFICATION}</Text>
-                <Text style={styles.DescriptionText}>{TranslateText[lan].DIRECT_ACCESS_TO_VERIFIED_GOVT_CIRCULARS}</Text>
+                <TextGenerateEffect
+                    words={TranslateText[lan].DIRECT_ACCESS_TO_VERIFIED_GOVT_CIRCULARS}
+                    duration={0.5}
+                    textStyle={styles.DescriptionText}
+                />
             </View>
         </View>
     )
@@ -17,7 +22,6 @@ const HeadingAndTitle: React.FC = () => {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         display: "flex",
         flexDirection: "column"
     },
@@ -34,7 +38,8 @@ const styles = StyleSheet.create({
         fontWeight: "600",
         color: "#2C2C2C",
         fontFamily: 'Inter_500Medium',
-        textTransform: "uppercase"
+        textTransform: "uppercase",
+        marginRight: "auto"
     },
     DescriptionText: {
         fontSize: 14,
@@ -43,7 +48,7 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins_400Regular',
         textTransform: "uppercase",
         letterSpacing: 0.5,
-        lineHeight: 20
+        lineHeight: 20,
     }
 })
 

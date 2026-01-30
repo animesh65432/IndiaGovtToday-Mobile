@@ -3,7 +3,7 @@ import { LanguagesTypes, OptionsforLanguagesTypes } from "@/types/index";
 export const Languages: LanguagesTypes[] = [
     { name: 'অসমীয়া', id: 0 },
     { name: 'বাংলা', id: 1 },
-    { name: 'बरʼ', id: 2 },
+    { name: 'बर', id: 2 },
     { name: 'डोगरी', id: 3 },
     { name: 'ગુજરાતી', id: 4 },
     { name: 'हिन्दी', id: 5 },
@@ -11,7 +11,6 @@ export const Languages: LanguagesTypes[] = [
     { name: 'कॉशुर', id: 7 },
     { name: 'मैथिली', id: 8 },
     { name: 'മലയാളം', id: 9 },
-    { name: 'মৈতৈলোন', id: 10 },
     { name: 'मराठी', id: 11 },
     { name: 'नेपाली', id: 12 },
     { name: 'ଓଡ଼ିଆ', id: 13 },
