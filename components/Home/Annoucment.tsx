@@ -3,15 +3,17 @@ import { formatDateRelative } from "@/lib/fromDate";
 import { LANGUAGE_CODES } from "@/lib/lan";
 import { TranslateText } from "@/lib/translatetext";
 import { AnnouncementType } from "@/types";
+import { useRouter } from 'expo-router';
 import { Building, MoveRight } from 'lucide-react-native';
 import React, { useContext } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 type Props = {
     announcement: AnnouncementType;
 };
 
 const Announcement: React.FC<Props> = ({ announcement }) => {
+    const router = useRouter();
     const { lan } = useContext(lanContext);
 
     return (
@@ -48,12 +50,12 @@ const Announcement: React.FC<Props> = ({ announcement }) => {
             </View>
 
             {/* Footer */}
-            <View style={styles.FooterContainer}>
+            <Pressable style={styles.FooterContainer} onPress={() => router.navigate("/explore")} >
                 <Text style={styles.seeDetails}>
                     {TranslateText[lan].SEE_DETAILS}
                 </Text>
                 <MoveRight size={14} color="#111827" />
-            </View>
+            </Pressable>
         </View>
     );
 };
@@ -74,7 +76,7 @@ const styles = StyleSheet.create({
 
     // Header
     header: {
-        gap: 8,
+        gap: 10,
     },
     topRow: {
         flexDirection: "row",
@@ -152,10 +154,9 @@ const styles = StyleSheet.create({
         marginTop: 10,
     },
 
-    // Footer
     seeDetails: {
         fontFamily: "Inter_600SemiBold",
-        fontSize: 14,
+        fontSize: 13,
         color: "#111827",
         letterSpacing: 0.2,
     },

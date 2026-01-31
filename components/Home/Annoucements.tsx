@@ -1,30 +1,31 @@
 import data from "@/data.json"
 import React from 'react'
-import { StyleSheet, View, } from "react-native"
+import { ScrollView, StyleSheet, View } from "react-native"
 import Annoucment from './Annoucment'
 
 const Annoucements: React.FC = () => {
     return (
-        <View style={style.Container}>
-            {data.map((item) =>
-                <Annoucment
-                    announcement={item}
-                    key={item.announcementId}
-                />)
-            }
-        </View>
+        <ScrollView style={style.Container}>
+            <View style={style.Inner}>
+                {data.map((item) =>
+                    <Annoucment
+                        announcement={item}
+                        key={item.announcementId}
+                    />)
+                }
+            </View>
+        </ScrollView>
     )
 }
 
 const style = StyleSheet.create({
     Container: {
         flex: 1,
-        display: "flex",
+    },
+    Inner: {
         flexDirection: "column",
-        overflowX: "auto",
-        gap: 15
+        gap: 15,
     }
 })
-
 
 export default Annoucements

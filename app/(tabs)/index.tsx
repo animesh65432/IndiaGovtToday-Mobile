@@ -14,8 +14,6 @@ export default function HomeScreen() {
   const [SearchInput, SetSearchInput] = useState<string>("");
 
 
-
-
   return (
     <ImageBackground
       source={require('../../assets/images/bg.png')}
