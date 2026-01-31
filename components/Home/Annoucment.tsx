@@ -50,7 +50,7 @@ const Announcement: React.FC<Props> = ({ announcement }) => {
             </View>
 
             {/* Footer */}
-            <Pressable style={styles.FooterContainer} onPress={() => router.navigate("/explore")} >
+            <Pressable style={styles.FooterContainer} onPress={() => router.navigate("/announcement/123")} >
                 <Text style={styles.seeDetails}>
                     {TranslateText[lan].SEE_DETAILS}
                 </Text>
