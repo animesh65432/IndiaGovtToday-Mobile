@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import Annoucements from "@/components/Home/Annoucements";
 import HeadingAndTitle from "@/components/Home/HeadingAndTitle";
 import InputToggole from "@/components/Home/InputToggole";
 import ShowFilter from "@/components/Home/Showfilter";
@@ -6,12 +7,14 @@ import { useState } from "react";
 import { ImageBackground, StyleSheet } from 'react-native';
 
 export default function HomeScreen() {
+
   const [visible, setVisible] = useState(false);
   const [StatesSelected, SetStatesSelected] = useState<string[]>([]);
   const [DeparmentsSelected, SetDeparmentsSelected] = useState<string>("")
   const [SearchInput, SetSearchInput] = useState<string>("");
 
-  console.log(visible)
+
+
 
   return (
     <ImageBackground
@@ -38,6 +41,7 @@ export default function HomeScreen() {
           onSearch={() => { }}
         />
       }
+      <Annoucements />
     </ImageBackground>
   );
 }
@@ -47,7 +51,7 @@ const styles = StyleSheet.create({
     flex: 1,
     display: "flex",
     flexDirection: "column",
-    gap: 15,
+    gap: 18,
     overflow: "hidden"
   }
 })

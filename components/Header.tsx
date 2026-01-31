@@ -1,33 +1,23 @@
 import { lanContext } from "@/context/lan";
-import { Languages } from "@/lib/lan";
+import { optionsforLanguages } from "@/lib/lan";
 import { Globe } from "lucide-react-native";
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 
 const Header: React.FC = () => {
-    const { setLan } = useContext(lanContext);
-    const [value, setValue] = useState<string>(
-        Languages[Languages.length - 1].name
-    );
-
-    const dropdownData = Languages.map(lang => ({
-        label: lang.name,
-        value: lang.name,
-    }));
-
+    const { setLan, lan } = useContext(lanContext);
     return (
         <View style={styles.container}>
             <View style={styles.dropdownWrapper}>
                 <Dropdown
-                    data={dropdownData}
+                    data={optionsforLanguages}
                     labelField="label"
                     valueField="value"
-                    placeholder="English"
-                    value={value}
+                    placeholder={lan}
+                    value={lan}
                     onChange={item => {
-                        setValue(item.value);
-                        setLan(item.value);
+                        setLan(item.label);
                     }}
                     style={styles.dropdown}
                     selectedTextStyle={styles.selectedText}
@@ -64,7 +54,7 @@ const styles = StyleSheet.create({
         marginTop: 50,
         width: 100,
         flexShrink: 1,
-        minWidth: 120,
+        minWidth: 100,
 
     },
     dropdown: {
@@ -79,13 +69,13 @@ const styles = StyleSheet.create({
 
     },
     selectedText: {
-        fontSize: 16,
+        fontSize: 13,
         color: '#1C3257',
         textTransform: "uppercase",
         fontWeight: 500
     },
     placeholder: {
-        fontSize: 16,
+        fontSize: 13,
         color: '#1C3257',
         textTransform: "uppercase",
         fontWeight: 500
@@ -101,7 +91,7 @@ const styles = StyleSheet.create({
         textTransform: "uppercase"
     },
     itemText: {
-        fontSize: 16,
+        fontSize: 13,
         fontWeight: 600
     },
     iconWrapper: {

@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
         height: 50,
         backgroundColor: "#FFFFFF",
         paddingVertical: 12,
-        paddingLeft: 45, // Space for icon
+        paddingLeft: 45,
         paddingRight: 15,
         fontFamily: "Montserrat_400Regular",
         borderRadius: 10,

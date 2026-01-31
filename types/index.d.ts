@@ -13,3 +13,13 @@ export type OptionsforLanguagesTypes = {
     label: string;
     value: string;
 }
+
+export type AnnouncementType = {
+    title: string,
+    description: string,
+    state: string,
+    category: string,
+    department: string,
+    date: string,
+    announcementId: string
+}
