@@ -30,22 +30,22 @@ const Details: React.FC<Props> = ({ lan, date, source, state, department, catego
                 <Text style={styles.text}>{formatDateInLanguage(date, LANGUAGE_CODES[lan])}</Text>
             </View>
 
-            <View style={styles.row}>
+            <View style={[styles.row, styles.spacer]}> {/* Add spacer */}
                 <MapPin size={16} color="#1e293b" />
                 <Text style={styles.text}>{state}</Text>
             </View>
 
-            <View style={styles.row}>
+            <View style={[styles.row, styles.spacer]}>
                 <Landmark size={16} color="#1e293b" />
                 <Text style={styles.text}>{department}</Text>
             </View>
 
-            <View style={styles.row}>
+            <View style={[styles.row, styles.spacer]}>
                 <LayoutGrid size={16} color="#1e293b" />
                 <Text style={styles.text}>{category}</Text>
             </View>
 
-            <TouchableOpacity style={styles.row} onPress={openUrl}>
+            <TouchableOpacity style={[styles.row, styles.spacer]} onPress={openUrl}>
                 <Link size={16} color="#1e293b" />
                 <Text style={styles.linkText}>{TranslateText[lan].VIEW_OFFICIAL_SOURCE}</Text>
             </TouchableOpacity>
@@ -55,29 +55,31 @@ const Details: React.FC<Props> = ({ lan, date, source, state, department, catego
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         borderWidth: 1,
         borderColor: '#000000',
         padding: 20,
         backgroundColor: '#ffffff',
-        gap: 8,
+        alignSelf: 'center',
         width: '90%',
-        marginLeft: "auto",
-        marginRight: "auto",
     },
     row: {
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 8,
+    },
+    spacer: {
+        marginTop: 8,
     },
     text: {
         color: '#1e293b',
-        fontSize: 14,
+        fontSize: 15,
+        marginLeft: 8,
+        fontFamily: "Inter_500Regular"
     },
     linkText: {
         color: '#1e293b',
         fontSize: 14,
         textDecorationLine: 'underline',
+        marginLeft: 8,
     },
 })
 

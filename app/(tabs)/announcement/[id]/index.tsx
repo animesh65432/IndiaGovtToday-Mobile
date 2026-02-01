@@ -1,34 +1,25 @@
-import Annoucment from '@/components/Announcement';
+import Announcement from '@/components/Announcement';
 import AnnouncementSkeleton from '@/components/Announcement/Skeleton';
 import { useLocalSearchParams } from 'expo-router';
-import { useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-
+import { SafeAreaView, StyleSheet } from 'react-native';
 
 export default function AnnouncementDetail() {
-    const [announcementId, setAnnouncementId] = useState<string | null>(null);
     const { id } = useLocalSearchParams();
 
-    useEffect(() => {
-        if (id && typeof id === 'string') {
-            setAnnouncementId(id);
-        }
-    }, [id])
-
-    if (!announcementId) {
+    if (!id || typeof id !== 'string') {
         return <AnnouncementSkeleton />
     }
 
     return (
-        <View style={styles.fullScreen}>
-            <Annoucment Id={announcementId} />
-        </View>
+        <SafeAreaView style={styles.safeArea}>
+            <Announcement Id={Array.isArray(id) ? id[0] : id} />
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
-    fullScreen: {
-        display: 'flex',
-        flexDirection: "column"
+    safeArea: {
+        flex: 1,
+        backgroundColor: '#fff',
     }
 });

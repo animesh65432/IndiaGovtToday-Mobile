@@ -16,9 +16,8 @@ const Title: React.FC<Props> = ({ title }) => {
 const styles = StyleSheet.create({
     titleContainer: {
         width: "90%",
-        marginLeft: "auto",
-        marginRight: "auto",
-        flexShrink: 1
+        flexShrink: 1,
+        alignSelf: "center"
     },
     title: {
         fontFamily: "Roboto_700Bold",

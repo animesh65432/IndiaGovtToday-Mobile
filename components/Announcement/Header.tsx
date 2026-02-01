@@ -1,9 +1,12 @@
+import { lanContext } from '@/context/lan';
+import { TranslateText } from "@/lib/translatetext";
 import { router } from 'expo-router';
 import { ArrowLeft } from "lucide-react-native";
-import React from 'react';
+import React, { useContext } from 'react';
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 const Header: React.FC = () => {
+    const { lan } = useContext(lanContext);
     return (
         <View style={styles.container}>
             <Pressable
@@ -12,7 +15,7 @@ const Header: React.FC = () => {
             >
                 <View style={styles.backButton}>
                     <ArrowLeft size={14} color="black" />
-                    <Text style={styles.backText}>Back</Text>
+                    <Text style={styles.backText}>{TranslateText[lan].BACK}</Text>
                 </View>
             </Pressable>
         </View>
@@ -24,7 +27,7 @@ const styles = StyleSheet.create({
         width: "90%",
         marginLeft: "auto",
         marginRight: "auto",
-        marginTop: 30
+        marginTop: 50
     },
     backButton: {
         padding: 10,
