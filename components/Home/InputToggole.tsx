@@ -27,7 +27,7 @@ const InputToggle: React.FC<Props> = ({ setVisible }) => {
                 style={styles.Input}
                 placeholder={TranslateText[lan].INPUT_PLACEHOLDER}
                 placeholderTextColor="#999"
-                onChange={handlePress}
+                onPress={handlePress}
             />
         </View>
     );

@@ -6,6 +6,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { Building2, Calendar as CalendarIcon, ChevronRight, MapPin, Search } from 'lucide-react-native';
 import React, { useContext, useEffect, useState } from 'react';
 import {
+    FlatList,
     Platform,
     Pressable,
     ScrollView,
@@ -15,7 +16,7 @@ import {
     View,
 } from 'react-native';
 
-type MobileSearchInputboxProps = {
+type SearchInputboxProps = {
     StatesSelected: string[];
     SetStatesSelected: React.Dispatch<React.SetStateAction<string[]>>;
     DeparmentsSelected: string;
@@ -25,7 +26,7 @@ type MobileSearchInputboxProps = {
     onSearch: () => void;
 };
 
-const MobileSearchInputbox: React.FC<MobileSearchInputboxProps> = ({
+const SearchInputbox: React.FC<SearchInputboxProps> = ({
     StatesSelected,
     SetStatesSelected,
     DeparmentsSelected,
@@ -88,6 +89,72 @@ const MobileSearchInputbox: React.FC<MobileSearchInputboxProps> = ({
         return DeparmentsSelected;
     };
 
+    const renderRegionOption = ({ item }: { item: any }) => (
+        <Pressable
+            style={styles.dropdownOption}
+            onPress={() => toggleRegion(item.value)}
+        >
+            <View
+                style={[
+                    styles.checkbox,
+                    StatesSelected.includes(item.value) && styles.checkboxChecked,
+                ]}
+            >
+                {StatesSelected.includes(item.value) && (
+                    <Text style={styles.checkmark}>✓</Text>
+                )}
+            </View>
+            <Text style={styles.dropdownOptionText}>{item.label}</Text>
+        </Pressable>
+    );
+
+    const renderDepartmentOption = ({ item, index }: { item: string; index: number }) => {
+        // First item is "All Departments"
+        if (index === 0) {
+            return (
+                <Pressable
+                    style={styles.dropdownOption}
+                    onPress={() => handleDepartmentSelect('')}
+                >
+                    <View
+                        style={[
+                            styles.checkbox,
+                            !DeparmentsSelected && styles.checkboxChecked,
+                        ]}
+                    >
+                        {!DeparmentsSelected && (
+                            <Text style={styles.checkmark}>✓</Text>
+                        )}
+                    </View>
+                    <Text style={styles.dropdownOptionText}>
+                        {TranslateText[lan].ALL_DEPARMENTS}
+                    </Text>
+                </Pressable>
+            );
+        }
+
+        // Regular department options
+        const dept = item;
+        return (
+            <Pressable
+                style={styles.dropdownOption}
+                onPress={() => handleDepartmentSelect(dept)}
+            >
+                <View
+                    style={[
+                        styles.checkbox,
+                        DeparmentsSelected === dept && styles.checkboxChecked,
+                    ]}
+                >
+                    {DeparmentsSelected === dept && (
+                        <Text style={styles.checkmark}>✓</Text>
+                    )}
+                </View>
+                <Text style={styles.dropdownOptionText}>{dept}</Text>
+            </Pressable>
+        );
+    };
+
     return (
         <ScrollView
             style={styles.container}
@@ -98,11 +165,7 @@ const MobileSearchInputbox: React.FC<MobileSearchInputboxProps> = ({
             <View style={styles.section}>
                 <Text style={styles.label}>{TranslateText[lan].KEYWORDS}</Text>
                 <View style={styles.searchInputContainer}>
-                    <Search
-                        size={18}
-                        color="#9CA3AF"
-                        style={styles.searchIcon}
-                    />
+                    <Search size={18} color="#9CA3AF" style={styles.searchIcon} />
                     <TextInput
                         style={styles.searchInput}
                         placeholder={TranslateText[lan].INPUT_PLACEHOLDER}
@@ -121,10 +184,12 @@ const MobileSearchInputbox: React.FC<MobileSearchInputboxProps> = ({
                     onPress={() => setShowRegionPicker(!showRegionPicker)}
                 >
                     <MapPin size={18} color="#9CA3AF" style={styles.selectButtonIcon} />
-                    <Text style={[
-                        styles.selectButtonText,
-                        StatesSelected.length === 0 && styles.selectButtonPlaceholder
-                    ]}>
+                    <Text
+                        style={[
+                            styles.selectButtonText,
+                            StatesSelected.length === 0 && styles.selectButtonPlaceholder,
+                        ]}
+                    >
                         {StatesSelected.length > 0
                             ? `${StatesSelected.length} region${StatesSelected.length > 1 ? 's' : ''} selected`
                             : 'Select Regions'}
@@ -134,30 +199,15 @@ const MobileSearchInputbox: React.FC<MobileSearchInputboxProps> = ({
 
                 {showRegionPicker && (
                     <View style={styles.dropdown}>
-                        <ScrollView style={styles.dropdownScroll}>
-                            {TranslateText[lan].MULTISELECT_OPTIONS.map((option: any) => (
-                                <Pressable
-                                    key={option.value}
-                                    style={styles.dropdownOption}
-                                    onPress={() => toggleRegion(option.value)}
-                                >
-                                    <View
-                                        style={[
-                                            styles.checkbox,
-                                            StatesSelected.includes(option.value) &&
-                                            styles.checkboxChecked,
-                                        ]}
-                                    >
-                                        {StatesSelected.includes(option.value) && (
-                                            <Text style={styles.checkmark}>✓</Text>
-                                        )}
-                                    </View>
-                                    <Text style={styles.dropdownOptionText}>
-                                        {option.label}
-                                    </Text>
-                                </Pressable>
-                            ))}
-                        </ScrollView>
+                        <FlatList
+                            data={TranslateText[lan].MULTISELECT_OPTIONS}
+                            renderItem={renderRegionOption}
+                            keyExtractor={(item) => item.value}
+                            style={styles.dropdownList}
+                            contentContainerStyle={styles.dropdownContent}
+                            showsVerticalScrollIndicator={true}
+                            nestedScrollEnabled={true}
+                        />
                     </View>
                 )}
             </View>
@@ -170,10 +220,12 @@ const MobileSearchInputbox: React.FC<MobileSearchInputboxProps> = ({
                     onPress={() => setShowDepartmentPicker(!showDepartmentPicker)}
                 >
                     <Building2 size={18} color="#9CA3AF" style={styles.selectButtonIcon} />
-                    <Text style={[
-                        styles.selectButtonText,
-                        !DeparmentsSelected && styles.selectButtonPlaceholder
-                    ]}>
+                    <Text
+                        style={[
+                            styles.selectButtonText,
+                            !DeparmentsSelected && styles.selectButtonPlaceholder,
+                        ]}
+                    >
                         {getSelectedDepartmentLabel()}
                     </Text>
                     <ChevronRight size={18} color="#9CA3AF" />
@@ -181,47 +233,15 @@ const MobileSearchInputbox: React.FC<MobileSearchInputboxProps> = ({
 
                 {showDepartmentPicker && (
                     <View style={styles.dropdown}>
-                        <ScrollView style={styles.dropdownScroll}>
-                            <Pressable
-                                style={styles.dropdownOption}
-                                onPress={() => handleDepartmentSelect('')}
-                            >
-                                <View
-                                    style={[
-                                        styles.checkbox,
-                                        !DeparmentsSelected && styles.checkboxChecked,
-                                    ]}
-                                >
-                                    {!DeparmentsSelected && (
-                                        <Text style={styles.checkmark}>✓</Text>
-                                    )}
-                                </View>
-                                <Text style={styles.dropdownOptionText}>
-                                    {TranslateText[lan].ALL_DEPARMENTS}
-                                </Text>
-                            </Pressable>
-                            {options.map((dept) => (
-                                <Pressable
-                                    key={dept}
-                                    style={styles.dropdownOption}
-                                    onPress={() => handleDepartmentSelect(dept)}
-                                >
-                                    <View
-                                        style={[
-                                            styles.checkbox,
-                                            DeparmentsSelected === dept && styles.checkboxChecked,
-                                        ]}
-                                    >
-                                        {DeparmentsSelected === dept && (
-                                            <Text style={styles.checkmark}>✓</Text>
-                                        )}
-                                    </View>
-                                    <Text style={styles.dropdownOptionText}>
-                                        {dept}
-                                    </Text>
-                                </Pressable>
-                            ))}
-                        </ScrollView>
+                        <FlatList
+                            data={['', ...options]} // Empty string for "All Departments"
+                            renderItem={renderDepartmentOption}
+                            keyExtractor={(item, index) => index.toString()}
+                            style={styles.dropdownList}
+                            contentContainerStyle={styles.dropdownContent}
+                            showsVerticalScrollIndicator={true}
+                            nestedScrollEnabled={true}
+                        />
                     </View>
                 )}
             </View>
@@ -281,9 +301,7 @@ const MobileSearchInputbox: React.FC<MobileSearchInputboxProps> = ({
                 ]}
                 onPress={onSearch}
             >
-                <Text style={styles.searchButtonText}>
-                    {TranslateText[lan].SEARCH}
-                </Text>
+                <Text style={styles.searchButtonText}>{TranslateText[lan].SEARCH}</Text>
                 <ChevronRight size={20} color="#FFFFFF" />
             </Pressable>
         </ScrollView>
@@ -328,7 +346,7 @@ const styles = StyleSheet.create({
         color: '#111827',
     },
 
-    // Unified Select Button (for both Region and Department)
+    // Unified Select Button
     selectButton: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -351,22 +369,24 @@ const styles = StyleSheet.create({
         color: '#9CA3AF',
     },
 
-    // Unified Dropdown (for both Region and Department)
+    // Unified Dropdown
     dropdown: {
         marginTop: 8,
         backgroundColor: '#FFFFFF',
         borderRadius: 16,
-        maxHeight: 300,
+        height: 300, // Fixed height instead of maxHeight
         borderWidth: 1,
         borderColor: '#F3F4F6',
-        // Shadow
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.1,
         shadowRadius: 12,
         elevation: 5,
     },
-    dropdownScroll: {
+    dropdownList: {
+        flex: 1,
+    },
+    dropdownContent: {
         padding: 8,
     },
     dropdownOption: {
@@ -432,7 +452,6 @@ const styles = StyleSheet.create({
         backgroundColor: '#EAB308',
         borderRadius: 16,
         gap: 8,
-        // Shadow
         shadowColor: '#1E3A8A',
         shadowOffset: { width: 0, height: 4 },
         shadowOpacity: 0.2,
@@ -449,4 +468,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default MobileSearchInputbox;
+export default SearchInputbox;

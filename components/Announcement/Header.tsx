@@ -1,11 +1,16 @@
 import { lanContext } from '@/context/lan';
 import { TranslateText } from "@/lib/translatetext";
 import { router } from 'expo-router';
-import { ArrowLeft } from "lucide-react-native";
+import { ArrowLeft, Share2 } from "lucide-react-native";
 import React, { useContext } from 'react';
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-const Header: React.FC = () => {
+type Props = {
+    toggleShare: boolean,
+    setToggleShare: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+const Header: React.FC<Props> = ({ toggleShare, setToggleShare }) => {
     const { lan } = useContext(lanContext);
     return (
         <View style={styles.container}>
@@ -18,6 +23,9 @@ const Header: React.FC = () => {
                     <Text style={styles.backText}>{TranslateText[lan].BACK}</Text>
                 </View>
             </Pressable>
+            <View>
+                <Share2 onPress={() => setToggleShare((prev) => !prev)} />
+            </View>
         </View>
     )
 }
@@ -27,7 +35,11 @@ const styles = StyleSheet.create({
         width: "90%",
         marginLeft: "auto",
         marginRight: "auto",
-        marginTop: 50
+        marginTop: 50,
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
     },
     backButton: {
         padding: 10,

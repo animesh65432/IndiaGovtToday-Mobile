@@ -1,19 +1,73 @@
-import data from "@/data.json"
-import React from 'react'
-import { ScrollView, StyleSheet, View } from "react-native"
-import Annoucment from './Annoucment'
+import { lanContext } from '@/context/lan';
+import { TranslateText } from '@/lib/translatetext';
+import { AnnouncementType } from '@/types';
+import React, { useContext } from 'react';
+import { ActivityIndicator, ScrollView, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import Annoucment from './Annoucment';
+import AnnouncementSkeleton from './AnnouncementSkeleton';
 
-const Annoucements: React.FC = () => {
+
+type Props = {
+    Annoucements: AnnouncementType[];
+    OnLoadMoredata: () => void;
+    IsLoading: boolean;
+    page: number;
+    totalPages: number;
+}
+
+const Annoucements: React.FC<Props> = ({ Annoucements, OnLoadMoredata, IsLoading, page, totalPages }) => {
+    const { lan } = useContext(lanContext);
+
+    // Show skeletons only on initial load (page 1 and no announcements yet)
+    const isInitialLoading = IsLoading && Annoucements.length === 0;
+
+    if (Annoucements.length === 0 && !IsLoading) {
+        return (
+            <View style={style.EmptyContainer}>
+                <Text style={style.NO_ANNOUNCEMENTS_FOUND}>
+                    {TranslateText[lan].NO_ANNOUNCEMENTS_FOUND}
+                </Text>
+            </View>
+        )
+    }
+
     return (
         <ScrollView style={style.Container}>
             <View style={style.Inner}>
-                {data.map((item) =>
-                    <Annoucment
-                        announcement={item}
-                        key={item.announcementId}
-                    />)
-                }
+                {isInitialLoading ? (
+                    new Array(5).fill(0).map((_, index) => (
+                        <AnnouncementSkeleton key={`skeleton-${index}`} />
+                    ))
+                ) : (
+                    Annoucements.map((item) => (
+                        <Annoucment
+                            announcement={item}
+                            key={item.announcementId}
+                        />
+                    ))
+                )}
             </View>
+            {page < totalPages && (
+                <View style={style.LoadMoreContainer}>
+                    <TouchableOpacity
+                        style={[
+                            style.LoadMoreButton,
+                            IsLoading && style.LoadMoreButtonDisabled
+                        ]}
+                        onPress={OnLoadMoredata}
+                        disabled={IsLoading}
+                        activeOpacity={0.7}
+                    >
+                        {IsLoading ? (
+                            <ActivityIndicator size="small" color="#000" />
+                        ) : (
+                            <Text style={style.LoadMoreButtonText}>
+                                {TranslateText[lan].LOAD_MORE}
+                            </Text>
+                        )}
+                    </TouchableOpacity>
+                </View>
+            )}
         </ScrollView>
     )
 }
@@ -25,7 +79,43 @@ const style = StyleSheet.create({
     Inner: {
         flexDirection: "column",
         gap: 15,
-    }
+        paddingBottom: 50,
+    },
+    EmptyContainer: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        padding: 20,
+    },
+    NO_ANNOUNCEMENTS_FOUND: {
+        fontFamily: "Inter_500Medium",
+        fontSize: 18,
+        color: "#000",
+    },
+    LoadMoreContainer: {
+        paddingVertical: 20,
+        paddingHorizontal: 20,
+        alignItems: "center",
+    },
+    LoadMoreButton: {
+        borderWidth: 1,
+        borderColor: "#000",
+        backgroundColor: "#fff",
+        paddingHorizontal: 24,
+        paddingVertical: 12,
+        borderRadius: 0,
+        minWidth: 120,
+        alignItems: "center",
+        justifyContent: "center",
+    },
+    LoadMoreButtonDisabled: {
+        opacity: 0.6,
+    },
+    LoadMoreButtonText: {
+        color: "#000",
+        fontSize: 16,
+        fontWeight: "500",
+    },
 })
 
 export default Annoucements

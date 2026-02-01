@@ -1,7 +1,5 @@
-import { GeolocationResponse } from "@/types/geolocation";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Geolocation from '@react-native-community/geolocation';
-import { PermissionsAndroid, Platform } from 'react-native';
+import * as Location from 'expo-location';
 
 export async function getUserIndiaLocation(): Promise<{
     state_ut: string;
@@ -26,61 +24,33 @@ export async function getUserIndiaLocation(): Promise<{
         console.warn('Cache read error:', error);
     }
 
-
-    if (Platform.OS === 'ios') {
-        try {
-            await new Promise<void>((resolve, reject) => {
-                Geolocation.requestAuthorization(resolve, reject);
-            });
-        } catch (error) {
-            console.warn('iOS location permission denied');
-            return null;
-        }
-    }
-    // Android: Use PermissionsAndroid
-    else if (Platform.OS === 'android') {
-        try {
-            const granted = await PermissionsAndroid.request(
-                PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-                {
-                    title: 'Location Permission',
-                    message: 'This app needs access to your location to provide India-specific features.',
-                    buttonNeutral: 'Ask Me Later',
-                    buttonNegative: 'Cancel',
-                    buttonPositive: 'OK',
-                }
-            );
-            if (granted !== PermissionsAndroid.RESULTS.GRANTED) {
-                console.warn('Android location permission denied');
-                return null;
-            }
-        } catch (error) {
-            console.warn('Android permission request error:', error);
-            return null;
-        }
-    }
-
-    const position = await new Promise<GeolocationResponse>((resolve, reject) => {
-        Geolocation.getCurrentPosition(
-            (position: GeolocationResponse) => resolve(position),
-            (error) => reject(error),
-            {
-                enableHighAccuracy: true,
-                timeout: 15000,
-                maximumAge: 10000,
-            }
-        );
-    });
-
-    const { latitude: lat, longitude: lng } = position.coords;
-
+    // Request location permissions (works for both iOS and Android)
     try {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+            console.warn('Location permission denied');
+            return null;
+        }
+    } catch (error) {
+        console.warn('Permission request error:', error);
+        return null;
+    }
+
+    // Get current position
+    try {
+        const location = await Location.getCurrentPositionAsync({
+            accuracy: Location.Accuracy.High,
+        });
+
+        const { latitude: lat, longitude: lng } = location.coords;
+
+        // Fetch reverse geocoding data
         const response = await fetch(
             `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`
         );
         const data = await response.json();
 
-        const location = {
+        const locationData = {
             state_ut: data.principalSubdivision || '',
             district: data.locality || '',
             city: data.city || data.locality || '',
@@ -88,14 +58,15 @@ export async function getUserIndiaLocation(): Promise<{
             pincode: data.postcode || '',
         };
 
+        // Cache the result
         const cacheData = {
-            data: location,
+            data: locationData,
             timestamp: Date.now(),
         };
         await AsyncStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
-        return location;
+        return locationData;
     } catch (error) {
-        console.error('Geocoding error:', error);
+        console.error('Location or geocoding error:', error);
         return null;
     }
 }

@@ -23,3 +23,14 @@ export type AnnouncementType = {
     date: string,
     announcementId: string
 }
+
+export type AnnouncementsResponse = {
+    data: Announcement[],
+    languageCode: string,
+    pagination: {
+        page: number,
+        totalPages: number,
+        totalCount: number,
+        pageSize: number
+    }
+}

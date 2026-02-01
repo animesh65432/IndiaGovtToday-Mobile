@@ -2,6 +2,7 @@ import { lanContext } from '@/context/lan';
 import temp from "@/temp.json";
 import React, { useContext } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
+import ShareSection from '../ShareSection';
 import Details from "./Details";
 import Header from './Header';
 import KeyInformation from './KeyInformation';
@@ -13,12 +14,16 @@ type Props = {
 }
 
 const Annoucment: React.FC<Props> = ({ Id }) => {
+    const [toggleShare, setToggleShare] = React.useState(false);
     const { lan } = useContext(lanContext)
 
     return (
         <View style={styles.container}>
 
-            <Header />
+            <Header
+                toggleShare={toggleShare}
+                setToggleShare={setToggleShare}
+            />
             <Title title={temp.title} />
 
             <ScrollView
@@ -49,6 +54,13 @@ const Annoucment: React.FC<Props> = ({ Id }) => {
                     points={temp.sections[2].points!}
                 />
             </ScrollView>
+            {toggleShare &&
+                <ShareSection
+                    Announcement={temp.title}
+                    setisShareOpen={setToggleShare}
+                    isShareOpen={toggleShare}
+                    shareUrl={temp.source_link}
+                />}
         </View>
     )
 }
