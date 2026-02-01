@@ -1,11 +1,14 @@
+import { getAnnouncement } from '@/api/announcements';
 import { lanContext } from '@/context/lan';
 import temp from "@/temp.json";
-import React, { useContext } from 'react';
+import { ShowAnnouncementTypes } from "@/types";
+import React, { useContext, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import ShareSection from '../ShareSection';
 import Details from "./Details";
 import Header from './Header';
 import KeyInformation from './KeyInformation';
+import AnnouncementSkeleton from './Skeleton';
 import TextDiv from './TextDiv';
 import Title from './Title';
 
@@ -14,8 +17,33 @@ type Props = {
 }
 
 const Annoucment: React.FC<Props> = ({ Id }) => {
-    const [toggleShare, setToggleShare] = React.useState(false);
+    const [toggleShare, setToggleShare] = useState(false);
     const { lan } = useContext(lanContext)
+    const [announcement, setannouncement] = useState<ShowAnnouncementTypes | null>(null)
+    const [IsLoading, SetIsLoading] = useState<boolean>(false)
+
+    async function fetch() {
+        SetIsLoading(true)
+        try {
+            const response = await getAnnouncement(lan, Id) as { data: ShowAnnouncementTypes }
+            setannouncement(response.data)
+        }
+        finally {
+            SetIsLoading(false)
+        }
+    }
+
+    useEffect(() => {
+        if (Id) {
+            fetch()
+        }
+    }, [Id, lan])
+
+    if (IsLoading || !announcement) {
+        return <View style={styles.container}>
+            <AnnouncementSkeleton />
+        </View>
+    }
 
     return (
         <View style={styles.container}>
@@ -24,7 +52,7 @@ const Annoucment: React.FC<Props> = ({ Id }) => {
                 toggleShare={toggleShare}
                 setToggleShare={setToggleShare}
             />
-            <Title title={temp.title} />
+            <Title title={announcement.title} />
 
             <ScrollView
                 style={styles.scroll}
@@ -32,31 +60,34 @@ const Annoucment: React.FC<Props> = ({ Id }) => {
                 showsVerticalScrollIndicator={false}
             >
                 <Details
-                    date={temp.date}
-                    department={temp.department}
-                    category={temp.category}
+                    date={announcement.date}
+                    department={announcement.department}
+                    category={announcement.category}
                     lan={lan}
-                    source={temp.source_link}
-                    state={temp.state}
+                    source={announcement.source_link}
+                    state={announcement.state}
                 />
                 <TextDiv
-                    heading={temp.sections[0].heading}
-                    content={temp.sections[0].content!}
+                    heading={announcement.sections[0].heading}
+                    content={'content' in announcement.sections[0] ?
+                        announcement.sections[0].content : 'Content not available'
+                    }
 
                 />
                 <TextDiv
                     heading={temp.sections[1].heading}
-                    content={temp.sections[1].content!}
-
+                    content={'content' in announcement.sections[1] ?
+                        announcement.sections[1].content : 'Content not available'
+                    }
                 />
                 <KeyInformation
                     heading={temp.sections[2].heading}
-                    points={temp.sections[2].points!}
+                    points={'points' in announcement.sections[2] ? announcement.sections[2].points : []}
                 />
             </ScrollView>
             {toggleShare &&
                 <ShareSection
-                    Announcement={temp.title}
+                    Announcement={announcement.title}
                     setisShareOpen={setToggleShare}
                     isShareOpen={toggleShare}
                     shareUrl={temp.source_link}

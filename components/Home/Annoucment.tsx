@@ -50,7 +50,7 @@ const Announcement: React.FC<Props> = ({ announcement }) => {
             </View>
 
             {/* Footer */}
-            <Pressable style={styles.FooterContainer} onPress={() => router.navigate("/announcement/123")} >
+            <Pressable style={styles.FooterContainer} onPress={() => router.navigate(`https://indiangovtoday.app/announcement?id=${announcement.announcementId}&lan=${lan}`)} >
                 <Text style={styles.seeDetails}>
                     {TranslateText[lan].SEE_DETAILS}
                 </Text>
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     },
     description: {
         fontFamily: "Poppins_400Regular",
-        fontSize: 14,
+        fontSize: 15,
         color: "#4B5563",
         lineHeight: 25,
     },
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
 
     seeDetails: {
         fontFamily: "Inter_600SemiBold",
-        fontSize: 13,
+        fontSize: 14,
         color: "#111827",
         letterSpacing: 0.2,
     },

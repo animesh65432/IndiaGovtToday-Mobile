@@ -1,6 +1,6 @@
 import { lanContext } from '@/context/lan'
 import { TranslateText } from '@/lib/translatetext'
-import { Mail, MessageCircle, Share2, Twitter, X } from 'lucide-react-native'
+import { MessageCircle, Share2, Twitter, X } from 'lucide-react-native'
 import React, { useContext } from 'react'
 import {
     Linking,
@@ -44,11 +44,7 @@ export default function ShareSection({ Announcement, setisShareOpen, isShareOpen
             icon: <Twitter size={24} color="#ca8a04" />,
             url: `https://twitter.com/intent/tweet?text=${encodedMessage}&url=${encodedUrl}`,
         },
-        {
-            name: "Email",
-            icon: <Mail size={24} color="#ca8a04" />,
-            url: `mailto:?subject=${encodeURIComponent("Check this amazing announcement!")}&body=${encodedMessageWithUrl}`,
-        },
+
     ]
 
     const handleShare = async (url: string) => {
@@ -105,9 +101,9 @@ export default function ShareSection({ Announcement, setisShareOpen, isShareOpen
                                 {TranslateText[lan].SHARE_ANNOUNCEMENT}
                             </Text>
                         </View>
-                        <Text style={styles.headerSubtitle}>
+                        {/* <Text style={styles.headerSubtitle}>
                             {TranslateText[lan].HELP_OTHERS_DISCOVER}
-                        </Text>
+                        </Text> */}
                     </View>
 
                     {/* Share Preview */}
@@ -170,7 +166,7 @@ export default function ShareSection({ Announcement, setisShareOpen, isShareOpen
 const styles = StyleSheet.create({
     overlay: {
         flex: 1,
-        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        backgroundColor: "transparent",
         justifyContent: 'center',
         alignItems: 'center',
         padding: 16,

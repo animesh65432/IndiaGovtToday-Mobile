@@ -6,10 +6,9 @@ import {
     Dimensions,
     Modal,
     Pressable,
-    ScrollView,
     StyleSheet,
     Text,
-    View,
+    View
 } from 'react-native';
 import Animated, {
     useAnimatedStyle,
@@ -108,11 +107,9 @@ const ShowFilter: React.FC<Props> = ({
                         </Pressable>
                     </View>
 
-                    {/* Content */}
-                    <ScrollView
+                    {/* Content - ScrollView for scrolling, dropdowns are absolute positioned */}
+                    <View
                         style={styles.scrollView}
-                        contentContainerStyle={styles.scrollContent}
-                        showsVerticalScrollIndicator={false}
                     >
                         <SearchInputbox
                             StatesSelected={StatesSelected}
@@ -126,7 +123,7 @@ const ShowFilter: React.FC<Props> = ({
                                 onClose();
                             }}
                         />
-                    </ScrollView>
+                    </View>
                 </Animated.View>
             </View>
         </Modal>
@@ -202,9 +199,10 @@ const styles = StyleSheet.create({
     scrollView: {
         flex: 1,
     },
-    scrollContent: {
+    Content: {
         paddingHorizontal: 8,
         paddingBottom: 40,
+        flexGrow: 1,
     },
 });
 

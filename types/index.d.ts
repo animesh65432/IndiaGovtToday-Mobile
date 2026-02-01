@@ -34,3 +34,38 @@ export type AnnouncementsResponse = {
         pageSize: number
     }
 }
+
+type SummarySection = {
+    type: "summary";
+    heading: string;
+    content: string;
+};
+
+type DetailsSection = {
+    type: "details";
+    heading: string;
+    content: string;
+};
+
+type KeyPointsSection = {
+    type: "keypoints";
+    heading: string;
+    points: string[];
+};
+
+export type SectionTypes =
+    | SummarySection
+    | DetailsSection
+    | KeyPointsSection;
+
+export type ShowAnnouncementTypes = {
+    announcementId: string,
+    source_link: string,
+    state: string,
+    title: string,
+    date: string,
+    category: string,
+    department: string,
+    sections: SectionTypes[]
+
+}

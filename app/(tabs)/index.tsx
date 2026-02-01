@@ -49,6 +49,7 @@ export default function HomeScreen() {
 
     if (StatesSelected.length === 0) {
       SetIsLoading(false);
+      SetIsLoadingMore(false);
       return;
     }
 
@@ -141,7 +142,7 @@ export default function HomeScreen() {
           SetDeparmentsSelected={SetDeparmentsSelected}
           SearchInput={SearchInput}
           SetSearchInput={SetSearchInput}
-          onSearch={() => { }}
+          onSearch={handleSearch}
         />
       }
       <Annoucements
@@ -150,6 +151,7 @@ export default function HomeScreen() {
         OnLoadMoredata={OnLoadMoredata}
         page={page}
         totalPages={totalPages}
+        IsLoadingMore={IsLoadingMore}
       />
     </ImageBackground>
   );

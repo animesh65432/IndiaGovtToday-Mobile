@@ -13,9 +13,10 @@ type Props = {
     IsLoading: boolean;
     page: number;
     totalPages: number;
+    IsLoadingMore: boolean
 }
 
-const Annoucements: React.FC<Props> = ({ Annoucements, OnLoadMoredata, IsLoading, page, totalPages }) => {
+const Annoucements: React.FC<Props> = ({ IsLoadingMore, Annoucements, OnLoadMoredata, IsLoading, page, totalPages }) => {
     const { lan } = useContext(lanContext);
 
     // Show skeletons only on initial load (page 1 and no announcements yet)
@@ -30,6 +31,8 @@ const Annoucements: React.FC<Props> = ({ Annoucements, OnLoadMoredata, IsLoading
             </View>
         )
     }
+
+    console.log(IsLoadingMore);
 
     return (
         <ScrollView style={style.Container}>
@@ -58,7 +61,7 @@ const Annoucements: React.FC<Props> = ({ Annoucements, OnLoadMoredata, IsLoading
                         disabled={IsLoading}
                         activeOpacity={0.7}
                     >
-                        {IsLoading ? (
+                        {IsLoadingMore ? (
                             <ActivityIndicator size="small" color="#000" />
                         ) : (
                             <Text style={style.LoadMoreButtonText}>
