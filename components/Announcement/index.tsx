@@ -1,7 +1,6 @@
 import { getAnnouncement } from '@/api/announcements';
 import { lanContext } from '@/context/lan';
 import { usetexttospech } from '@/hooks/usetexttospech';
-import temp from "@/temp.json";
 import { ShowAnnouncementTypes } from "@/types";
 import React, { useContext, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
@@ -79,13 +78,13 @@ const Annoucment: React.FC<Props> = ({ Id }) => {
 
                 />
                 <TextDiv
-                    heading={temp.sections[1].heading}
+                    heading={announcement.sections[1].heading}
                     content={'content' in announcement.sections[1] ?
                         announcement.sections[1].content : 'Content not available'
                     }
                 />
                 <KeyInformation
-                    heading={temp.sections[2].heading}
+                    heading={announcement.sections[2].heading}
                     points={'points' in announcement.sections[2] ? announcement.sections[2].points : []}
                 />
             </ScrollView>
