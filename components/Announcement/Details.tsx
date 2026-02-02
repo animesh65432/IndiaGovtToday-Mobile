@@ -26,11 +26,10 @@ const Details: React.FC<Props> = ({ lan, date, source, state, department, catego
     return (
         <View style={styles.container}>
             <View style={styles.row}>
-                <Calendar size={16} color="#1e293b" />
-                <Text style={styles.text}>{formatDateInLanguage(date, LANGUAGE_CODES[lan])}</Text>
+                <Calendar size={16} color="#1e293b" /><Text style={styles.text}>{formatDateInLanguage(date, LANGUAGE_CODES[lan])}</Text>
             </View>
 
-            <View style={[styles.row, styles.spacer]}> {/* Add spacer */}
+            <View style={[styles.row, styles.spacer]}>
                 <MapPin size={16} color="#1e293b" />
                 <Text style={styles.text}>{state}</Text>
             </View>
@@ -47,7 +46,9 @@ const Details: React.FC<Props> = ({ lan, date, source, state, department, catego
 
             <TouchableOpacity style={[styles.row, styles.spacer]} onPress={openUrl}>
                 <Link size={16} color="#1e293b" />
-                <Text style={styles.linkText}>{TranslateText[lan].VIEW_OFFICIAL_SOURCE}</Text>
+                <Text style={styles.linkText}>
+                    {TranslateText[lan]?.VIEW_OFFICIAL_SOURCE || 'View Official Source'}
+                </Text>
             </TouchableOpacity>
         </View>
     )

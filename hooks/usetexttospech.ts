@@ -1,29 +1,27 @@
-import { UseLanguageContext } from "@/context/Lan"
-import { Call } from "@/service/call"
-import { useState, useRef } from "react"
-import { useTranslation } from "react-i18next"
+import { lanContext } from "@/context/lan";
+import { Call } from "@/service/call";
+import { Audio } from 'expo-av';
+import { Sound } from 'expo-av/build/Audio';
+import { useContext, useRef, useState } from "react";
 
 export const usetexttospech = () => {
-    const { i18n } = useTranslation()
-    const context = UseLanguageContext()
-    const [IsLoading, setloading] = useState(false)
+    const [IsLoading, setIsLoading] = useState(false)
     const [isPlaying, setIsPlaying] = useState(false)
     const [isPaused, setIsPaused] = useState(false)
-    const audioRef = useRef<HTMLAudioElement | null>(null)
+
+    const context = useContext(lanContext)
+    const soundRef = useRef<Sound | null>(null)
     const chunksRef = useRef<string[]>([])
     const currentChunkIndexRef = useRef(0)
 
-    // Function to split text into chunks
     const splitTextIntoChunks = (text: string, maxLength: number = 2500): string[] => {
         const chunks: string[] = []
         const sentences = text.match(/[^.!?]+[.!?]+/g) || [text]
-
         let currentChunk = ""
 
         for (const sentence of sentences) {
             const trimmedSentence = sentence.trim()
 
-            // If single sentence is longer than maxLength, split it by words
             if (trimmedSentence.length > maxLength) {
                 if (currentChunk) {
                     chunks.push(currentChunk.trim())
@@ -46,7 +44,6 @@ export const usetexttospech = () => {
                 continue
             }
 
-            // Check if adding this sentence exceeds the limit
             if ((currentChunk + ' ' + trimmedSentence).length > maxLength) {
                 if (currentChunk) chunks.push(currentChunk.trim())
                 currentChunk = trimmedSentence
@@ -62,15 +59,28 @@ export const usetexttospech = () => {
         return chunks
     }
 
-    // Function to play a specific chunk
-    const playChunk = async (chunkIndex: number) => {
+    const cleanup = async () => {
+        if (soundRef.current) {
+            try {
+                await soundRef.current.unloadAsync()
+            } catch (e) {
+                console.log('Cleanup error:', e)
+            }
+            soundRef.current = null
+        }
+        chunksRef.current = []
+        currentChunkIndexRef.current = 0
+    }
+
+    const playChunk = async (chunkIndex: number): Promise<void> => {
+        console.log('Playing chunk:', chunkIndex, '/', chunksRef.current.length)
+
         if (chunkIndex >= chunksRef.current.length) {
-            // All chunks played
+            console.log('All chunks finished')
+            await cleanup()
+            setIsLoading(false)
             setIsPlaying(false)
             setIsPaused(false)
-            audioRef.current = null
-            chunksRef.current = []
-            currentChunkIndexRef.current = 0
             return
         }
 
@@ -78,106 +88,134 @@ export const usetexttospech = () => {
         const cleanedChunk = chunk.replace(/[.,/*]/g, "")
 
         try {
-            if (!context) return
+            if (!context) {
+                console.error('Context is not available')
+                setIsLoading(false)
+                setIsPlaying(false)
+                setIsPaused(false)
+                return
+            }
 
-            const { language } = context
+            const { lan } = context
+
+            console.log('Fetching audio for chunk:', chunkIndex)
             const response = await Call({
                 method: "POST",
                 path: "/texttospech",
                 request: {
                     text: cleanedChunk,
-                    target_language: language
+                    target_language: lan
                 }
             }) as { audioContent: string }
 
-            if (audioRef.current) {
-                audioRef.current.pause()
-                audioRef.current = null
+            console.log('Audio received, creating sound object')
+
+            // Unload previous sound
+            if (soundRef.current) {
+                await soundRef.current.unloadAsync()
+                soundRef.current = null
             }
 
-            const audio = new Audio(`data:audio/mp3;base64,${response.audioContent}`)
-            audioRef.current = audio
+            // Create sound
+            const { sound } = await Audio.Sound.createAsync(
+                { uri: `data:audio/mp3;base64,${response.audioContent}` },
+                { shouldPlay: false }
+            )
 
-            audio.onplay = () => {
-                setIsPlaying(true)
-                setIsPaused(false)
-            }
+            soundRef.current = sound
 
-            audio.onpause = () => {
-                setIsPlaying(false)
-                setIsPaused(true)
-            }
+            console.log('Sound created, updating states')
 
-            audio.onended = () => {
-                // Play next chunk automatically
-                currentChunkIndexRef.current++
-                playChunk(currentChunkIndexRef.current)
-            }
+            // **UPDATE STATES INDIVIDUALLY AND IN ORDER**
+            setIsLoading(false)
+            setIsPaused(false)
+            setIsPlaying(true)
 
-            audio.onerror = () => {
-                setIsPlaying(false)
-                setIsPaused(false)
-                audioRef.current = null
-                chunksRef.current = []
-                currentChunkIndexRef.current = 0
-            }
+            console.log('States updated, starting playback')
+            await sound.playAsync()
 
-            audio.play()
+            // Set up finish listener
+            sound.setOnPlaybackStatusUpdate((status) => {
+                if (status.isLoaded && status.didJustFinish) {
+                    console.log('Chunk finished')
+                    currentChunkIndexRef.current++
+                    playChunk(currentChunkIndexRef.current)
+                }
+            })
+
         } catch (error) {
-            console.error("Error playing chunk:", error)
+            console.error('Error in playChunk:', error)
+            await cleanup()
+            setIsLoading(false)
             setIsPlaying(false)
             setIsPaused(false)
-            audioRef.current = null
-            chunksRef.current = []
-            currentChunkIndexRef.current = 0
         }
     }
 
-    async function call(text: string) {
-        setloading(true)
+    const call = async (text: string) => {
+        console.log('Call function started')
+
+        // **SET LOADING STATE FIRST**
+        setIsPlaying(false)
+        setIsPaused(false)
+        setIsLoading(true)
+
         try {
-            // Split text into chunks
+            await Audio.requestPermissionsAsync()
+            await Audio.setAudioModeAsync({
+                allowsRecordingIOS: false,
+                playsInSilentModeIOS: true,
+                staysActiveInBackground: true,
+            })
+
             const chunks = splitTextIntoChunks(text, 2500)
+            console.log('Split into chunks:', chunks.length)
+
             chunksRef.current = chunks
             currentChunkIndexRef.current = 0
 
-            // Start playing from the first chunk
             await playChunk(0)
-        } finally {
-            setloading(false)
-        }
-    }
 
-    function pause() {
-        if (audioRef.current && isPlaying) {
-            audioRef.current.pause()
-        }
-    }
-
-    function resume() {
-        if (audioRef.current && isPaused) {
-            audioRef.current.play()
-        }
-    }
-
-    function stop() {
-        if (audioRef.current) {
-            audioRef.current.pause()
-            audioRef.current.currentTime = 0
+        } catch (error) {
+            console.error('Error in call:', error)
+            setIsLoading(false)
             setIsPlaying(false)
             setIsPaused(false)
-            audioRef.current = null
         }
-        // Reset chunks
-        chunksRef.current = []
-        currentChunkIndexRef.current = 0
     }
 
-    function togglePlayPause() {
+    const pause = async () => {
+        console.log('Pause called')
+        if (soundRef.current && isPlaying) {
+            await soundRef.current.pauseAsync()
+            setIsPlaying(false)
+            setIsPaused(true)
+        }
+    }
+
+    const resume = async () => {
+        console.log('Resume called')
+        if (soundRef.current && isPaused) {
+            await soundRef.current.playAsync()
+            setIsPaused(false)
+            setIsPlaying(true)
+        }
+    }
+
+    const stop = async () => {
+        console.log('Stop called')
+        await cleanup()
+        setIsLoading(false)
+        setIsPlaying(false)
+        setIsPaused(false)
+    }
+
+    const togglePlayPause = async () => {
+        console.log('Toggle called, isPlaying:', isPlaying, 'isPaused:', isPaused)
         if (isPlaying) {
-            pause()
+            await pause()
         } else if (isPaused) {
-            resume()
+            await resume()
         }
     }
 

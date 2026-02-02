@@ -1,5 +1,6 @@
 import { getAnnouncement } from '@/api/announcements';
 import { lanContext } from '@/context/lan';
+import { usetexttospech } from '@/hooks/usetexttospech';
 import temp from "@/temp.json";
 import { ShowAnnouncementTypes } from "@/types";
 import React, { useContext, useEffect, useState } from 'react';
@@ -19,6 +20,7 @@ type Props = {
 const Annoucment: React.FC<Props> = ({ Id }) => {
     const [toggleShare, setToggleShare] = useState(false);
     const { lan } = useContext(lanContext)
+    const audioHook = usetexttospech()
     const [announcement, setannouncement] = useState<ShowAnnouncementTypes | null>(null)
     const [IsLoading, SetIsLoading] = useState<boolean>(false)
 
@@ -51,6 +53,8 @@ const Annoucment: React.FC<Props> = ({ Id }) => {
             <Header
                 toggleShare={toggleShare}
                 setToggleShare={setToggleShare}
+                Annoucment={announcement}
+                audioHook={audioHook}
             />
             <Title title={announcement.title} />
 
@@ -90,7 +94,7 @@ const Annoucment: React.FC<Props> = ({ Id }) => {
                     Announcement={announcement.title}
                     setisShareOpen={setToggleShare}
                     isShareOpen={toggleShare}
-                    shareUrl={temp.source_link}
+                    shareUrl={`https://indiangovtoday.app/announcement?id=${announcement.announcementId}&lan=${lan}`}
                 />}
         </View>
     )

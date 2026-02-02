@@ -50,7 +50,7 @@ const Announcement: React.FC<Props> = ({ announcement }) => {
             </View>
 
             {/* Footer */}
-            <Pressable style={styles.FooterContainer} onPress={() => router.navigate(`https://indiangovtoday.app/announcement?id=${announcement.announcementId}&lan=${lan}`)} >
+            <Pressable style={styles.FooterContainer} onPress={() => router.navigate(`/announcement/${announcement.announcementId}`)} >
                 <Text style={styles.seeDetails}>
                     {TranslateText[lan].SEE_DETAILS}
                 </Text>
