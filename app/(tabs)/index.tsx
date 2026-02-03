@@ -142,7 +142,7 @@ export default function HomeScreen() {
       <View
         style={styles.contentLayer}
       >
-        <View style={styles.NavBarContentLayer}>
+        <View style={{ gap: 10 }}>
           <Header />
           <HeadingAndTitle />
           <InputToggole
@@ -150,30 +150,28 @@ export default function HomeScreen() {
             setVisible={setVisible}
           />
         </View>
-        <View>
-          {
-            visible &&
-            <ShowFilter
-              ShowFilterCard={visible}
-              SetFilterShowCard={setVisible}
-              StatesSelected={StatesSelected}
-              SetStatesSelected={SetStatesSelected}
-              DeparmentsSelected={DeparmentsSelected}
-              SetDeparmentsSelected={SetDeparmentsSelected}
-              SearchInput={SearchInput}
-              SetSearchInput={SetSearchInput}
-              onSearch={handleSearch}
-            />
-          }
-          <Annoucements
-            Annoucements={Announcements}
-            IsLoading={IsLoading}
-            OnLoadMoredata={OnLoadMoredata}
-            page={page}
-            totalPages={totalPages}
-            IsLoadingMore={IsLoadingMore}
+        {
+          visible &&
+          <ShowFilter
+            ShowFilterCard={visible}
+            SetFilterShowCard={setVisible}
+            StatesSelected={StatesSelected}
+            SetStatesSelected={SetStatesSelected}
+            DeparmentsSelected={DeparmentsSelected}
+            SetDeparmentsSelected={SetDeparmentsSelected}
+            SearchInput={SearchInput}
+            SetSearchInput={SetSearchInput}
+            onSearch={handleSearch}
           />
-        </View>
+        }
+        <Annoucements
+          Annoucements={Announcements}
+          IsLoading={IsLoading}
+          OnLoadMoredata={OnLoadMoredata}
+          page={page}
+          totalPages={totalPages}
+          IsLoadingMore={IsLoadingMore}
+        />
       </View>
     </View>
   );
@@ -193,9 +191,4 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     gap: 18,
   },
-  NavBarContentLayer: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 15,
-  }
 });
