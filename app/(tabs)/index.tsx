@@ -7,6 +7,7 @@ import ShowFilter from "@/components/Home/Showfilter";
 import { Currentdate } from "@/context/Currentdate";
 import { lanContext } from "@/context/lan";
 import { LocationContext } from "@/context/Location";
+import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { useStateCode } from "@/hooks/useStateCode";
 import { TranslateText } from "@/lib/translatetext";
 import { AnnouncementType, AnnouncementsResponse } from "@/types";
@@ -18,6 +19,7 @@ import { Toast } from 'toastify-react-native';
 export default function HomeScreen() {
 
   const [visible, setVisible] = useState(false);
+  const { isOnline } = useNetworkStatus();
   const [StatesSelected, SetStatesSelected] = useState<string[]>([]);
   const [DeparmentsSelected, SetDeparmentsSelected] = useState<string>("")
   const [SearchInput, SetSearchInput] = useState<string>("");
@@ -125,6 +127,7 @@ export default function HomeScreen() {
       Setpage(prev => prev + 1);
     }
   }
+
 
 
   return (

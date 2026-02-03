@@ -1,11 +1,9 @@
 import { lanContext } from '@/context/lan';
 import { usetexttospech } from "@/hooks/usetexttospech";
-import { TranslateText } from "@/lib/translatetext";
 import { ShowAnnouncementTypes } from "@/types";
-import { router } from 'expo-router';
-import { ArrowLeft, Pause, Play, Share2, Square, Volume2 } from "lucide-react-native";
+import { Pause, Play, Share2, Square, Volume2 } from "lucide-react-native";
 import React, { useContext } from 'react';
-import { ActivityIndicator, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, StyleSheet, TouchableOpacity, View } from "react-native";
 
 type Props = {
     toggleShare: boolean,
@@ -34,7 +32,6 @@ const Header: React.FC<Props> = ({ setToggleShare, Annoucment, audioHook }) => {
             return
         }
 
-        console.log('Starting new audio')
         const fullText = Annoucment.sections[0].heading + ". " +
             ('content' in Annoucment.sections[0] ? Annoucment.sections[0].content : '') + " " +
             Annoucment.sections[1].heading + ". " +
@@ -62,7 +59,7 @@ const Header: React.FC<Props> = ({ setToggleShare, Annoucment, audioHook }) => {
 
     return (
         <View style={styles.container}>
-            <Pressable
+            {/* <Pressable
                 onPress={() => router.back()}
                 style={({ pressed }) => [{ opacity: pressed ? 0.5 : 1 }]}
             >
@@ -70,7 +67,7 @@ const Header: React.FC<Props> = ({ setToggleShare, Annoucment, audioHook }) => {
                     <ArrowLeft size={14} color="black" />
                     <Text style={styles.backText}>{TranslateText[lan].BACK}</Text>
                 </View>
-            </Pressable>
+            </Pressable> */}
 
             <View style={styles.controlsContainer}>
                 <TouchableOpacity
@@ -112,7 +109,7 @@ const styles = StyleSheet.create({
         marginRight: "auto",
         marginTop: 50,
         flexDirection: "row",
-        justifyContent: "space-between",
+        justifyContent: "flex-end",
         alignItems: "center",
     },
     backButton: {
