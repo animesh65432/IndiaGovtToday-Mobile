@@ -4,7 +4,7 @@ import { LANGUAGE_CODES } from "@/lib/lan";
 import { TranslateText } from "@/lib/translatetext";
 import { AnnouncementType } from "@/types";
 import { useRouter } from 'expo-router';
-import { Building, MoveRight } from 'lucide-react-native';
+import { ArrowRight, Building, Clock } from 'lucide-react-native';
 import React, { useContext } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
@@ -26,8 +26,9 @@ const Announcement: React.FC<Props> = ({ announcement }) => {
                 </View>
 
                 <View style={styles.timeRow}>
+                    <Clock size={14} color="#6B7280" />
                     <Text style={styles.timeText}>
-                        🕐 {formatDateRelative(announcement.date, LANGUAGE_CODES[lan], lan)}
+                        {formatDateRelative(announcement.date, LANGUAGE_CODES[lan], lan)}
                     </Text>
                 </View>
             </View>
@@ -44,8 +45,10 @@ const Announcement: React.FC<Props> = ({ announcement }) => {
             {/* Divider */}
             <View style={styles.divider} />
 
-            <View style={styles.stateBadge}>
-                <Building size={14} color="#6B7280" />
+            <View style={styles.stateContainer} >
+                <View style={styles.stateBadge}>
+                    <Building size={14} color="black" />
+                </View>
                 <Text style={styles.stateText}>{announcement.state}</Text>
             </View>
 
@@ -54,9 +57,9 @@ const Announcement: React.FC<Props> = ({ announcement }) => {
                 <Text style={styles.seeDetails}>
                     {TranslateText[lan].SEE_DETAILS}
                 </Text>
-                <MoveRight size={14} color="#111827" />
+                <ArrowRight size={14} color="black" />
             </Pressable>
-        </View>
+        </View >
     );
 };
 
@@ -85,7 +88,7 @@ const styles = StyleSheet.create({
         gap: 8
     },
     departmentBadge: {
-        backgroundColor: "#E5E5E5",
+        backgroundColor: "rgba(218, 218, 215, 0.1)",
         paddingHorizontal: 10,
         paddingVertical: 4,
         borderRadius: 20,
@@ -93,21 +96,26 @@ const styles = StyleSheet.create({
         flexShrink: 1
     },
     departmentText: {
-        fontFamily: "Inter_500Medium",
-        fontSize: 11,
+        fontFamily: "Poppins_500Medium",
+        fontSize: 12,
         letterSpacing: 0.3,
-        color: "#374151",
+        color: "rgba(249, 200, 6, 0.9)",
     },
-    stateBadge: {
+    stateContainer: {
         flexDirection: "row",
         alignItems: "center",
         gap: 6,
     },
+    stateBadge: {
+        backgroundColor: "rgba(188, 188, 188, 0.1)",
+        padding: 6,
+        borderRadius: 20,
+    },
     stateText: {
-        fontFamily: "Inter_500Medium",
+        fontFamily: "Poppins_500Medium",
         fontSize: 13,
         letterSpacing: 0.3,
-        color: "#374151",
+        color: "black",
     },
 
     // Time
@@ -115,11 +123,13 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         gap: 5,
+        alignSelf: "flex-end"
     },
     timeText: {
         fontFamily: "Poppins_400Regular",
-        fontSize: 12,
+        fontSize: 13,
         color: "#6B7280",
+        textTransform: "uppercase"
     },
 
     // Divider
@@ -134,7 +144,7 @@ const styles = StyleSheet.create({
         gap: 6,
     },
     title: {
-        fontFamily: "Inter_600SemiBold",
+        fontFamily: "Poppins_600SemiBold",
         fontSize: 15,
         color: "#111827",
         lineHeight: 25,
@@ -155,7 +165,7 @@ const styles = StyleSheet.create({
     },
 
     seeDetails: {
-        fontFamily: "Inter_600SemiBold",
+        fontFamily: " Poppins_500Medium",
         fontSize: 14,
         color: "#111827",
         letterSpacing: 0.2,

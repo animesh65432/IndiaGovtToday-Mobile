@@ -9,7 +9,10 @@ const HeadingAndTitle: React.FC = () => {
     return (
         <View style={styles.container}>
             <View style={styles.TextTitleAndDes}>
-                <Text style={styles.HeadingText}>{TranslateText[lan].PUBLIC_NOTIFICATION}</Text>
+                <View style={styles.Titles}>
+                    <Text style={styles.HeadingText}>{TranslateText[lan].PUBLIC_NOTIFICATION.split(" ")[0]}</Text>
+                    <Text style={styles.HeadingText}>{TranslateText[lan].PUBLIC_NOTIFICATION.split(" ")[1]}</Text>
+                </View>
                 <TextGenerateEffect
                     words={TranslateText[lan].DIRECT_ACCESS_TO_VERIFIED_GOVT_CIRCULARS}
                     duration={0.5}
@@ -31,15 +34,21 @@ const styles = StyleSheet.create({
         width: "90%",
         marginLeft: "auto",
         marginRight: "auto",
-        gap: 5
+        gap: 10
+    },
+    Titles: {
+        display: "flex",
+        flexDirection: "column",
     },
     HeadingText: {
         fontSize: 24,
+        lineHeight: 30,
         fontWeight: "600",
         color: "#2C2C2C",
-        fontFamily: 'Inter_500Medium',
+        fontFamily: 'Poppins_600SemiBold',
         textTransform: "uppercase",
-        marginRight: "auto"
+        marginRight: "auto",
+        flexShrink: 1,
     },
     DescriptionText: {
         fontSize: 14,

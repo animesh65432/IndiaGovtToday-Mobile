@@ -21,7 +21,10 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.animesh2002.IndiaGovtToday"
+      "package": "com.animesh2002.IndiaGovtToday",
+      "jsEngine": "hermes",
+      "enableProguardInReleaseBuilds": true,
+      "enableShrinkResourcesInReleaseBuilds": true
     },
     "web": {
       "output": "static",

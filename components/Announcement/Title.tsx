@@ -20,9 +20,9 @@ const styles = StyleSheet.create({
         alignSelf: "center"
     },
     title: {
-        fontFamily: "Roboto_700Bold",
         color: "black",
-        fontSize: 22
+        fontSize: 20,
+        fontFamily: "Poppins_600SemiBold",
     }
 })
 

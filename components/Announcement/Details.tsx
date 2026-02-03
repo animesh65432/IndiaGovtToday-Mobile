@@ -56,12 +56,11 @@ const Details: React.FC<Props> = ({ lan, date, source, state, department, catego
 
 const styles = StyleSheet.create({
     container: {
-        borderWidth: 1,
-        borderColor: '#000000',
         padding: 20,
-        backgroundColor: '#ffffff',
+        backgroundColor: 'rgba(237, 221, 154, 0.9)',
         alignSelf: 'center',
         width: '90%',
+        borderRadius: 8
     },
     row: {
         flexDirection: 'row',
@@ -74,13 +73,14 @@ const styles = StyleSheet.create({
         color: '#1e293b',
         fontSize: 15,
         marginLeft: 8,
-        fontFamily: "Inter_500Regular"
+        fontFamily: "Poppins_500Medium",
     },
     linkText: {
         color: '#1e293b',
         fontSize: 14,
         textDecorationLine: 'underline',
         marginLeft: 8,
+        fontFamily: "Poppins_500Medium",
     },
 })
 

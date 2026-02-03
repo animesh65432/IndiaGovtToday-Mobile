@@ -187,6 +187,7 @@ const styles = StyleSheet.create({
         fontWeight: '800',
         color: '#111827',
         letterSpacing: -0.5,
+        fontFamily: "Poppins_600SemiBold"
     },
     closeButton: {
         padding: 8,

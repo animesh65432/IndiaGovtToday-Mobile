@@ -33,14 +33,14 @@ const styles = StyleSheet.create({
         fontSize: 19,
         fontWeight: '600',
         color: '#000',
-        fontFamily: 'Roboto_700Bold', // if you're using this font
+        fontFamily: "Poppins_600SemiBold"
     },
     content: {
         color: '#000',
         lineHeight: 32, // leading-7 (7 * 4 = 28px)
         width: '100%',
         fontSize: 16,
-        fontFamily: "poppins_400Regular"
+        fontFamily: "Poppins_400Regular"
     }
 })
 

@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
         fontSize: 19,
         fontWeight: '600',
         color: '#000',
-        fontFamily: 'Roboto_700Bold',
+        fontFamily: 'Poppins_600SemiBold',
     },
     pointsContainer: {
         flexDirection: 'column',
@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
         color: '#000',
         lineHeight: isLargeScreen ? 32 : 28, // lg:leading-8 : leading-7,
         fontSize: 16,
-        fontFamily: "poppins_400Regular"
+        fontFamily: "Poppins_400Regular"
     }
 })
 

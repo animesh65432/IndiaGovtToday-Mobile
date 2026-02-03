@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
         paddingVertical: 12,
         paddingLeft: 45,
         paddingRight: 15,
-        fontFamily: "Montserrat_400Regular",
+        fontFamily: "Poppins_400Regular",
         borderRadius: 10,
         fontSize: 14,
     },

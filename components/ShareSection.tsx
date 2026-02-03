@@ -204,6 +204,7 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         color: '#000',
         marginLeft: 12,
+        fontFamily: "Poppins_600SemiBold"
     },
     headerSubtitle: {
         fontSize: 14,
@@ -269,11 +270,13 @@ const styles = StyleSheet.create({
     },
     textContainer: {
         flex: 1,
+        fontFamily: "Poppins_500Medium"
     },
     shareButtonText: {
         fontSize: 16,
         fontWeight: '500',
         color: '#ca8a04',
+        fontFamily: "Poppins_500Medium"
     },
     indicator: {
         width: 8,

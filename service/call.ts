@@ -1,9 +1,9 @@
-import { API_BASE_URL, env, LocalhostUrl } from "@/config";
+import { LocalhostUrl } from "@/config";
 import type { AxiosRequestConfig, AxiosResponse } from "axios";
 import axios from "axios";
 import { Toast } from 'toastify-react-native';
 
-const API_URL = env === "PROD" ? API_BASE_URL : LocalhostUrl
+const API_URL = LocalhostUrl;
 
 
 export async function Call<T, ResponseType>({

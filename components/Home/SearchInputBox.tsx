@@ -528,6 +528,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '600',
         color: '#111827',
+        fontFamily: "Poppins_500Medium"
     },
     selectButtonTextActive: {
         color: '#3B82F6',
@@ -575,6 +576,7 @@ const styles = StyleSheet.create({
         color: '#6B7280',
         textTransform: 'uppercase',
         letterSpacing: 0.5,
+        fontFamily: "Poppins_500Medium"
     },
     doneButton: {
         fontSize: 14,
@@ -635,6 +637,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
         fontWeight: '500',
         color: '#374151',
+        fontFamily: "Poppins_400Regular"
     },
     dropdownOptionTextSelected: {
         color: '#1E40AF',
@@ -665,6 +668,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         fontWeight: '500',
         color: '#111827',
+        fontFamily: "Poppins_500Medium"
     },
     searchButton: {
         flexDirection: 'row',
@@ -689,6 +693,7 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         color: '#FFFFFF',
         letterSpacing: 0.5,
+        fontFamily: "Poppins_500Medium"
     },
 });
 

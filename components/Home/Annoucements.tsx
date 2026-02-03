@@ -31,9 +31,6 @@ const Annoucements: React.FC<Props> = ({ IsLoadingMore, Annoucements, OnLoadMore
             </View>
         )
     }
-
-    console.log(IsLoadingMore);
-
     return (
         <ScrollView style={style.Container}>
             <View style={style.Inner}>
@@ -91,33 +88,32 @@ const style = StyleSheet.create({
         padding: 20,
     },
     NO_ANNOUNCEMENTS_FOUND: {
-        fontFamily: "Inter_500Medium",
+        fontFamily: "Poppins_500Medium",
         fontSize: 18,
         color: "#000",
     },
     LoadMoreContainer: {
-        paddingVertical: 20,
-        paddingHorizontal: 20,
         alignItems: "center",
+        paddingBottom: 150,
     },
     LoadMoreButton: {
-        borderWidth: 1,
-        borderColor: "#000",
-        backgroundColor: "#fff",
-        paddingHorizontal: 24,
+        backgroundColor: "rgba(249, 200, 6, 0.9)",
+        paddingHorizontal: 20,
         paddingVertical: 12,
-        borderRadius: 0,
+        borderRadius: 10,
         minWidth: 120,
         alignItems: "center",
         justifyContent: "center",
+
     },
     LoadMoreButtonDisabled: {
         opacity: 0.6,
     },
     LoadMoreButtonText: {
-        color: "#000",
-        fontSize: 16,
+        color: "black",
+        fontSize: 14,
         fontWeight: "500",
+        fontFamily: " Poppins_600SemiBold",
     },
 })
 

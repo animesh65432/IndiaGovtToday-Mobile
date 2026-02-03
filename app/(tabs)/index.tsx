@@ -10,8 +10,9 @@ import { LocationContext } from "@/context/Location";
 import { useStateCode } from "@/hooks/useStateCode";
 import { TranslateText } from "@/lib/translatetext";
 import { AnnouncementType, AnnouncementsResponse } from "@/types";
+import { LinearGradient } from 'expo-linear-gradient';
 import { useContext, useEffect, useState } from "react";
-import { ImageBackground, StyleSheet } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Toast } from 'toastify-react-native';
 
 export default function HomeScreen() {
@@ -44,8 +45,13 @@ export default function HomeScreen() {
     signal: AbortSignal
   ) => {
 
-    if (append) SetIsLoadingMore(true);
-    else SetIsLoading(true);
+    if (append) {
+      SetIsLoadingMore(true)
+    }
+    else {
+      SetIsLoading(true);
+      SetAnnouncements([]);
+    }
 
     if (StatesSelected.length === 0) {
       SetIsLoading(false);
@@ -120,49 +126,76 @@ export default function HomeScreen() {
     }
   }
 
+
   return (
-    <ImageBackground
-      source={require('../../assets/images/bg.png')}
-      style={styles.container}
-    >
-      <Header />
-      <HeadingAndTitle />
-      <InputToggole
-        visible={visible}
-        setVisible={setVisible}
-      />
-      {
-        visible &&
-        <ShowFilter
-          ShowFilterCard={visible}
-          SetFilterShowCard={setVisible}
-          StatesSelected={StatesSelected}
-          SetStatesSelected={SetStatesSelected}
-          DeparmentsSelected={DeparmentsSelected}
-          SetDeparmentsSelected={SetDeparmentsSelected}
-          SearchInput={SearchInput}
-          SetSearchInput={SetSearchInput}
-          onSearch={handleSearch}
+    <View style={styles.container}>
+      <View style={StyleSheet.absoluteFill} pointerEvents="none">
+        <LinearGradient
+          colors={['rgba(251, 191, 36, 0.15)', 'transparent']}
+          style={[styles.gradientPos, { top: 0, left: 0 }]}
         />
-      }
-      <Annoucements
-        Annoucements={Announcements}
-        IsLoading={IsLoading}
-        OnLoadMoredata={OnLoadMoredata}
-        page={page}
-        totalPages={totalPages}
-        IsLoadingMore={IsLoadingMore}
-      />
-    </ImageBackground>
+        <LinearGradient
+          colors={['rgba(251, 191, 36, 0.08)', 'transparent']}
+          style={[styles.gradientPos, { top: 0, right: 0 }]}
+        />
+      </View>
+      <View
+        style={styles.contentLayer}
+      >
+        <View style={styles.NavBarContentLayer}>
+          <Header />
+          <HeadingAndTitle />
+          <InputToggole
+            visible={visible}
+            setVisible={setVisible}
+          />
+        </View>
+        <View>
+          {
+            visible &&
+            <ShowFilter
+              ShowFilterCard={visible}
+              SetFilterShowCard={setVisible}
+              StatesSelected={StatesSelected}
+              SetStatesSelected={SetStatesSelected}
+              DeparmentsSelected={DeparmentsSelected}
+              SetDeparmentsSelected={SetDeparmentsSelected}
+              SearchInput={SearchInput}
+              SetSearchInput={SetSearchInput}
+              onSearch={handleSearch}
+            />
+          }
+          <Annoucements
+            Annoucements={Announcements}
+            IsLoading={IsLoading}
+            OnLoadMoredata={OnLoadMoredata}
+            page={page}
+            totalPages={totalPages}
+            IsLoadingMore={IsLoadingMore}
+          />
+        </View>
+      </View>
+    </View>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    display: "flex",
+    backgroundColor: '#F9F9F4',
+  },
+  gradientPos: {
+    position: 'absolute',
+    width: '100%',
+    height: '40%',
+  },
+  contentLayer: {
+    flex: 1,
     flexDirection: "column",
     gap: 18,
-    overflow: "hidden"
+  },
+  NavBarContentLayer: {
+    display: "flex",
+    flexDirection: "column",
+    gap: 15,
   }
-})
+});

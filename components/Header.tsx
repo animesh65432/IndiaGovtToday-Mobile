@@ -2,13 +2,19 @@ import { lanContext } from "@/context/lan";
 import { optionsforLanguages } from "@/lib/lan";
 import { Globe } from "lucide-react-native";
 import React, { useContext } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { Image, StyleSheet, View } from 'react-native';
 import { Dropdown } from 'react-native-element-dropdown';
 
 const Header: React.FC = () => {
     const { setLan, lan } = useContext(lanContext);
     return (
         <View style={styles.container}>
+            <View style={styles.logoWrapper}>
+                <Image
+                    source={require('../assets/Icon.png')}
+                    style={styles.logo}
+                />
+            </View>
             <View style={styles.dropdownWrapper}>
                 <Dropdown
                     data={optionsforLanguages}
@@ -30,7 +36,7 @@ const Header: React.FC = () => {
                         height={15}
                         width={15}
                         style={styles.iconWrapper}
-                        color="#1C3257"
+                        color="black"
                     />}
                     search
                     searchPlaceholder="English"
@@ -43,19 +49,26 @@ const Header: React.FC = () => {
 
 const styles = StyleSheet.create({
     container: {
-        width: "95%",
+        width: "100%",
         marginLeft: "auto",
         marginRight: "auto",
         fontFamily: 'Poppins_400Regular',
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: "center",
+        marginTop: 40,
+    },
+    logoWrapper: {
+    },
+    logo: {
+        width: 180,
+        height: 60,
+        resizeMode: "cover",
     },
     dropdownWrapper: {
-        alignSelf: 'flex-end',
-        marginRight: 30,
-        marginTop: 50,
-        width: 100,
-        flexShrink: 1,
+        width: 120,
         minWidth: 100,
-
+        marginRight: 10,
     },
     dropdown: {
         height: 40,
@@ -63,22 +76,24 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         paddingHorizontal: 10,
         backgroundColor: 'white',
-        textTransform: "uppercase",
         flexDirection: 'row',
         alignItems: 'center',
-
+        fontFamily: 'Poppins_400Regular',
+        borderRadius: 12,
     },
     selectedText: {
         fontSize: 13,
-        color: '#1C3257',
+        color: 'black',
         textTransform: "uppercase",
-        fontWeight: 500
+        fontWeight: '500',
+        fontFamily: "Poppins_500Medium"
     },
     placeholder: {
         fontSize: 13,
-        color: '#1C3257',
+        color: 'black',
         textTransform: "uppercase",
-        fontWeight: 500
+        fontWeight: '500',
+        fontFamily: "Poppins_500Medium"
     },
     dropdownContainer: {
         borderRadius: 8,
@@ -88,17 +103,13 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.25,
         shadowRadius: 3.84,
         elevation: 5,
-        textTransform: "uppercase"
     },
     itemText: {
         fontSize: 13,
-        fontWeight: 600
+        fontWeight: '600'
     },
     iconWrapper: {
         marginRight: 8,
-        justifyContent: 'center',
-        alignItems: 'center',
-        color: "#1C3257"
     }
 });
 

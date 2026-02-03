@@ -54,10 +54,10 @@ const Header: React.FC<Props> = ({ setToggleShare, Annoucment, audioHook }) => {
     const getAudioIcon = () => {
         console.log('getAudioIcon - IsLoading:', IsLoading, 'isPaused:', isPaused, 'isPlaying:', isPlaying)
 
-        if (IsLoading) return <ActivityIndicator size="small" color="#000000" />
-        if (isPaused) return <Play size={24} color="#000000" />
-        if (isPlaying) return <Pause size={24} color="#000000" />
-        return <Volume2 size={24} color="#000000" />
+        if (IsLoading) return <ActivityIndicator size="small" color="#2d2d2d" />
+        if (isPaused) return <Play size={24} color="#2d2d2d" />
+        if (isPlaying) return <Pause size={24} color="#2d2d2d" />
+        return <Volume2 size={24} color="#2d2d2d" />
     }
 
     return (
@@ -78,7 +78,7 @@ const Header: React.FC<Props> = ({ setToggleShare, Annoucment, audioHook }) => {
                     activeOpacity={0.7}
                     style={styles.iconButton}
                 >
-                    <Share2 size={24} color="#000000" />
+                    <Share2 size={24} color="#2d2d2d" />
                 </TouchableOpacity>
 
                 {(isPlaying || isPaused) && (
@@ -88,7 +88,7 @@ const Header: React.FC<Props> = ({ setToggleShare, Annoucment, audioHook }) => {
                         activeOpacity={0.7}
                         accessibilityLabel="Stop audio"
                     >
-                        <Square size={24} color="#EF4444" />
+                        <Square size={24} color="#2d2d2d" />
                     </TouchableOpacity>
                 )}
 
@@ -117,13 +117,14 @@ const styles = StyleSheet.create({
     },
     backButton: {
         padding: 10,
-        borderColor: "black",
+        borderColor: "#e5e5e5",
         borderWidth: 1,
         alignSelf: 'flex-start',
         alignItems: 'center',
         justifyContent: 'center',
         flexDirection: 'row',
         gap: 6,
+        borderRadius: 8,
     },
     backText: {
         fontSize: 14,
