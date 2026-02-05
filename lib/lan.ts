@@ -51,7 +51,7 @@ export const LANGUAGE_CODES: Record<string, string> = {
 };
 
 
-export const Languages = [
+export const Languages: string[] = [
     "অসমীয়া",      // Assamese
     "বাংলা",        // Bengali
     "बरʼ",          // Bodo

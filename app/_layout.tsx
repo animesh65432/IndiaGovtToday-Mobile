@@ -1,4 +1,5 @@
 import LocationProvider from "@/context/Location";
+import { OnboardingProvider } from "@/context/OnBoardingProvider";
 import LanguageProvider from "@/context/Provider";
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
@@ -44,15 +45,17 @@ export default function RootLayout() {
   }
 
   return (
-    <LanguageProvider>
-      <LocationProvider>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-        </Stack>
-        <ToastManager />
-        <StatusBar style="auto" />
-      </LocationProvider>
-    </LanguageProvider>
+    <OnboardingProvider>
+      <LanguageProvider>
+        <LocationProvider>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+          </Stack>
+          <ToastManager />
+          <StatusBar style="auto" />
+        </LocationProvider>
+      </LanguageProvider>
+    </OnboardingProvider>
   );
 }
