@@ -13,6 +13,7 @@ export const OnboardingContext = createContext<OnboardingContextType>({
 
 export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const [hasOnboarded, setHasOnboarded] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         AsyncStorage.getItem('onboarded')
@@ -22,11 +23,21 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
                 } else {
                     setHasOnboarded(false);
                 }
-            });
+            })
+            .finally(() => setIsLoading(false));
     }, []);
 
+    const updateOnboarding = async (value: boolean) => {
+        setHasOnboarded(value);
+        await AsyncStorage.setItem('onboarded', value.toString());
+    };
+
+    if (isLoading) {
+        return null;
+    }
+
     return (
-        <OnboardingContext.Provider value={{ hasOnboarded, setHasOnboarded }}>
+        <OnboardingContext.Provider value={{ hasOnboarded, setHasOnboarded: updateOnboarding }}>
             {children}
         </OnboardingContext.Provider>
     )

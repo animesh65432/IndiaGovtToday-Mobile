@@ -8,7 +8,7 @@ import React, { useContext } from 'react';
 
 export default function TabLayout() {
   const { isOnline } = useNetworkStatus();
-  const { hasOnboarded } = useContext(OnboardingContext);
+  const { hasOnboarded, setHasOnboarded } = useContext(OnboardingContext);
 
 
   if (!isOnline) {
@@ -16,7 +16,7 @@ export default function TabLayout() {
   }
 
   if (!hasOnboarded) {
-    return <OnboardingScreen />;
+    return <OnboardingScreen setHasOnboarded={setHasOnboarded} />;
   }
 
   return (

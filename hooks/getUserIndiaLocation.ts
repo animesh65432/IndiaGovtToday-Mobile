@@ -9,14 +9,15 @@ export async function getUserIndiaLocation(): Promise<{
     pincode: string;
 } | null> {
     const CACHE_KEY = 'userIndiaLocation';
-    const CACHE_DURATION = 30 * 24 * 60 * 60 * 1000;
+    const CACHE_DURATION = 30 * 24 * 60 * 60 * 1000; // 30 days
 
+    // Check cache first
     try {
         const cached = await AsyncStorage.getItem(CACHE_KEY);
         if (cached) {
             const { data, timestamp } = JSON.parse(cached);
             if (Date.now() - timestamp < CACHE_DURATION) {
-                console.log(data, timestamp);
+                console.log('Using cached location:', data);
                 return data;
             }
         }
@@ -24,7 +25,7 @@ export async function getUserIndiaLocation(): Promise<{
         console.warn('Cache read error:', error);
     }
 
-    // Request location permissions (works for both iOS and Android)
+    // Request location permissions
     try {
         const { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== 'granted') {
@@ -36,18 +37,28 @@ export async function getUserIndiaLocation(): Promise<{
         return null;
     }
 
-    // Get current position
+    // Get current position with timeout
     try {
-        const location = await Location.getCurrentPositionAsync({
-            accuracy: Location.Accuracy.High,
-        });
+        const location = await Promise.race([
+            Location.getCurrentPositionAsync({
+                accuracy: Location.Accuracy.Balanced, // Changed from High for faster response
+            }),
+            new Promise<never>((_, reject) =>
+                setTimeout(() => reject(new Error('Location timeout')), 15000)
+            )
+        ]);
 
         const { latitude: lat, longitude: lng } = location.coords;
 
         // Fetch reverse geocoding data
         const response = await fetch(
-            `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`
+            `https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}&localityLanguage=en`,
         );
+
+        if (!response.ok) {
+            throw new Error(`Geocoding failed: ${response.status}`);
+        }
+
         const data = await response.json();
 
         const locationData = {
@@ -64,6 +75,8 @@ export async function getUserIndiaLocation(): Promise<{
             timestamp: Date.now(),
         };
         await AsyncStorage.setItem(CACHE_KEY, JSON.stringify(cacheData));
+
+        console.log('Location fetched and cached:', locationData);
         return locationData;
     } catch (error) {
         console.error('Location or geocoding error:', error);

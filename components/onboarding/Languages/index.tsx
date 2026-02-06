@@ -9,7 +9,7 @@ type props = {
 const { width } = Dimensions.get('window');
 
 const Languages: React.FC<props> = ({ handlePageChange }) => {
-    const [selectedLanguage, setSelectedLanguage] = useState<string>('');
+    const [selectedLanguage, setSelectedLanguage] = useState<string>('English');
 
     const selectLanguage = (language: string) => {
         setSelectedLanguage(language);
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     },
     dropdownContainer: {
         width: "100%",
-        height: "60%",
+        height: "65%",
     },
     dropdown: {
         flexDirection: "column",
