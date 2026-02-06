@@ -1,48 +1,36 @@
-import { StyleSheet } from "react-native";
-import Onboarding from "react-native-onboarding-swiper";
+import React from "react";
+import { StyleSheet, View } from "react-native";
 import Languages from "./Languages";
 import Welcome from "./welcome";
 
 const OnboardingScreen = () => {
+    const [pageIndex, setPageIndex] = React.useState(0);
+
+    const handlePageChange = (index: number) => {
+        setPageIndex(index);
+    }
+
     return (
-        <Onboarding
-            pages={[
-                {
-                    backgroundColor: "transparent",
-                    image: <Welcome />,
-                    title: "",
-                    subtitle: "",
-                },
-                {
-                    backgroundColor: "transparent",
-                    image: <Languages />,
-                    title: "",
-                    subtitle: "",
-                }
-            ]}
-            showSkip={true}
-            showNext={true}
-            showDone={true}
-            skipLabel="Skip"
-            nextLabel="Next"
-            bottomBarHeight={60}
-            containerStyles={{
-                paddingHorizontal: 0,
-            }}
-            imageContainerStyles={{
-                paddingBottom: 0,
-            }}
-            SkipButtonComponent={() => null}
-            NextButtonComponent={() => null}
-        />
+        <View style={styles.container}>
+            {pageIndex === 0 &&
+                <Welcome handlePageChange={handlePageChange} />
+            }
+            {
+                pageIndex === 1 &&
+                <Languages handlePageChange={handlePageChange} />
+            }
+
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
-    NextButtom: {
-        fontFamily: "Poppins_500Medium",
-        padding: 40
+    container: {
+        flex: 1,
+        backgroundColor: "#fff",
     }
 })
+
+
 
 export default OnboardingScreen;

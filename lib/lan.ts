@@ -50,8 +50,33 @@ export const LANGUAGE_CODES: Record<string, string> = {
     "English": "en"    // Urdu
 };
 
+export const LanguageOptions: { label: string, value: string }[] = [
+    { label: "English", value: "English" },
+    { label: "অসমীয়া", value: "Assamese" },
+    { label: "বাংলা", value: "Bengali" },
+    { label: "बर", value: "Bodo" },
+    { label: "डोगरी", value: "Dogri" },
+    { label: "ગુજરાતી", value: "Gujarati" },
+    { label: "हिन्दी", value: "Hindi" },
+    { label: "ಕನ್ನಡ", value: "Kannada" },
+    { label: "कॉशुर", value: "Kashmiri" },
+    { label: "मैथिली", value: "Maithili" },
+    { label: "മലയാളം", value: "Malayalam" },
+    { label: "মৈতৈলোন", value: "Manipuri" },
+    { label: "मराठी", value: "Marathi" },
+    { label: "नेपाली", value: "Nepali" },
+    { label: "ଓଡ଼ିଆ", value: "Odia" },
+    { label: "ਪੰਜਾਬੀ", value: "Punjabi" },
+    { label: "संस्कृतम्", value: "Sanskrit" },
+    { label: "ᱥᱟᱱᱛᱟᱲᱤ", value: "Santali" },
+    { label: "سنڌي", value: "Sindhi" },
+    { label: "தமிழ்", value: "Tamil" },
+    { label: "తెలుగు", value: "Telugu" },
+    { label: "اردو", value: "Urdu" },
+]
 
 export const Languages: string[] = [
+    "English",     // English
     "অসমীয়া",      // Assamese
     "বাংলা",        // Bengali
     "बरʼ",          // Bodo
@@ -73,7 +98,6 @@ export const Languages: string[] = [
     "தமிழ்",        // Tamil
     "తెలుగు",       // Telugu
     "اردو",        // Urdu,
-    "English"      // English
 ];
 
 
