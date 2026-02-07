@@ -1,3 +1,4 @@
+import { addsave } from "@/api/save";
 import { lanContext } from "@/context/lan";
 import { User as UserContext } from "@/context/user";
 import { formatDateRelative } from "@/lib/fromDate";
@@ -15,14 +16,19 @@ type Props = {
     setShowAuthCard: React.Dispatch<React.SetStateAction<boolean>>
 };
 
-const Announcement: React.FC<Props> = ({ announcement }) => {
+const Announcement: React.FC<Props> = ({ announcement, setShowAuthCard }) => {
     const router = useRouter();
     const { lan } = useContext(lanContext);
-    const { isLoggedIn } = useContext(UserContext);
+    const { isLoggedIn, token, } = useContext(UserContext);
 
-    const handleBookmark = () => {
+    const handleBookmark = async () => {
         if (!isLoggedIn) {
+            setShowAuthCard(true);
             return
+        }
+        else {
+            const response = await addsave(token, announcement.announcementId);
+            console.log(response)
         }
     }
 

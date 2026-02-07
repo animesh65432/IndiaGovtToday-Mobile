@@ -1,10 +1,11 @@
 import { Call } from "../service/call";
 
-export const singinwithgoogle = (credential: string, clientId: string) => Call({
-    path: "/google/auth",
+export const singinwithgoogle = (name: string, email: string) => Call({
+    path: "/auth",
     method: "POST",
     request: {
-        clientId,
-        credential
+        name,
+        email
     }
 })
+

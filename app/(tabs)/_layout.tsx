@@ -3,13 +3,12 @@ import OnboardingScreen from "@/components/onboarding";
 import { OnboardingContext } from "@/context/OnBoardingProvider";
 import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { Tabs } from 'expo-router';
-import { Home } from 'lucide-react-native';
+import { BookMarked, Home, User } from 'lucide-react-native';
 import React, { useContext } from 'react';
 
 export default function TabLayout() {
   const { isOnline } = useNetworkStatus();
   const { hasOnboarded, setHasOnboarded } = useContext(OnboardingContext);
-
 
   if (!isOnline) {
     return <OfflineNotice />;
@@ -38,6 +37,20 @@ export default function TabLayout() {
         name="announcement/[id]/index"
         options={{
           href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="save/index"
+        options={{
+          title: 'Saved',
+          tabBarIcon: ({ color, size }) => <BookMarked color={color} size={size} />,
+        }}
+      />
+      <Tabs.Screen
+        name="user/index"
+        options={{
+          title: 'User',
+          tabBarIcon: ({ color, size }) => <User color={color} size={size} />,
         }}
       />
     </Tabs>

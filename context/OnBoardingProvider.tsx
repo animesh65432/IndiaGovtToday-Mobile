@@ -19,7 +19,7 @@ export const OnboardingProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         AsyncStorage.getItem('onboarded')
             .then(value => {
                 if (value === 'true') {
-                    setHasOnboarded(false);
+                    setHasOnboarded(true);
                 } else {
                     setHasOnboarded(false);
                 }
