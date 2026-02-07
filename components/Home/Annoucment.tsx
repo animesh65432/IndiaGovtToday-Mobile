@@ -1,20 +1,30 @@
 import { lanContext } from "@/context/lan";
+import { User as UserContext } from "@/context/user";
 import { formatDateRelative } from "@/lib/fromDate";
 import { LANGUAGE_CODES } from "@/lib/lan";
 import { TranslateText } from "@/lib/translatetext";
 import { AnnouncementType } from "@/types";
 import { useRouter } from 'expo-router';
-import { ArrowRight, Building, Clock } from 'lucide-react-native';
+import { ArrowRight, Bookmark, Clock, Landmark } from 'lucide-react-native';
 import React, { useContext } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 type Props = {
     announcement: AnnouncementType;
+    showAuthCard: boolean
+    setShowAuthCard: React.Dispatch<React.SetStateAction<boolean>>
 };
 
 const Announcement: React.FC<Props> = ({ announcement }) => {
     const router = useRouter();
     const { lan } = useContext(lanContext);
+    const { isLoggedIn } = useContext(UserContext);
+
+    const handleBookmark = () => {
+        if (!isLoggedIn) {
+            return
+        }
+    }
 
     return (
         <View style={styles.container}>
@@ -23,6 +33,7 @@ const Announcement: React.FC<Props> = ({ announcement }) => {
                     <View style={styles.departmentBadge}>
                         <Text style={styles.departmentText}>{announcement.department}</Text>
                     </View>
+                    <Bookmark size={20} color="black" onPress={handleBookmark} />
                 </View>
 
                 <View style={styles.timeRow}>
@@ -44,21 +55,22 @@ const Announcement: React.FC<Props> = ({ announcement }) => {
 
             {/* Divider */}
             <View style={styles.divider} />
-
-            <View style={styles.stateContainer} >
-                <View style={styles.stateBadge}>
-                    <Building size={14} color="black" />
+            <View style={styles.footer}>
+                <View style={styles.stateContainer} >
+                    <View style={styles.stateBadge}>
+                        <Landmark size={14} color="black" />
+                    </View>
+                    <Text style={styles.stateText}>{announcement.state}</Text>
                 </View>
-                <Text style={styles.stateText}>{announcement.state}</Text>
-            </View>
 
-            {/* Footer */}
-            <Pressable style={styles.FooterContainer} onPress={() => router.navigate(`/announcement/${announcement.announcementId}`)} >
-                <Text style={styles.seeDetails}>
-                    {TranslateText[lan].SEE_DETAILS}
-                </Text>
-                <ArrowRight size={14} color="black" />
-            </Pressable>
+                {/* Footer */}
+                <Pressable style={styles.FooterContainer} onPress={() => router.navigate(`/announcement/${announcement.announcementId}`)} >
+                    <Text style={styles.seeDetails}>
+                        {TranslateText[lan].SEE_DETAILS}
+                    </Text>
+                    <ArrowRight size={14} color="black" />
+                </Pressable>
+            </View>
         </View >
     );
 };
@@ -123,7 +135,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         gap: 5,
-        alignSelf: "flex-end"
+        alignSelf: "flex-start"
     },
     timeText: {
         fontFamily: "Poppins_400Regular",
@@ -161,7 +173,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         gap: 8,
         justifyContent: "flex-end",
-        marginTop: 10,
     },
 
     seeDetails: {
@@ -170,6 +181,12 @@ const styles = StyleSheet.create({
         color: "#111827",
         letterSpacing: 0.2,
     },
+    footer: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "space-between",
+    }
 });
 
 export default Announcement;

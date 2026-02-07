@@ -14,9 +14,11 @@ type Props = {
     page: number;
     totalPages: number;
     IsLoadingMore: boolean
+    showAuthCard: boolean
+    setShowAuthCard: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const Annoucements: React.FC<Props> = ({ IsLoadingMore, Annoucements, OnLoadMoredata, IsLoading, page, totalPages }) => {
+const Annoucements: React.FC<Props> = ({ IsLoadingMore, Annoucements, OnLoadMoredata, IsLoading, page, totalPages, showAuthCard, setShowAuthCard }) => {
     const { lan } = useContext(lanContext);
 
     // Show skeletons only on initial load (page 1 and no announcements yet)
@@ -43,6 +45,8 @@ const Annoucements: React.FC<Props> = ({ IsLoadingMore, Annoucements, OnLoadMore
                         <Annoucment
                             announcement={item}
                             key={item.announcementId}
+                            showAuthCard={showAuthCard}
+                            setShowAuthCard={setShowAuthCard}
                         />
                     ))
                 )}

@@ -1,25 +1,24 @@
 import { getAllAnnouncements } from "@/api/announcements";
-import Header from "@/components/Header";
+import AuthCard from "@/components/AuthCard";
 import Annoucements from "@/components/Home/Annoucements";
 import HeadingAndTitle from "@/components/Home/HeadingAndTitle";
-import InputToggole from "@/components/Home/InputToggole";
+import Input from "@/components/Home/Input";
 import ShowFilter from "@/components/Home/Showfilter";
 import { Currentdate } from "@/context/Currentdate";
 import { lanContext } from "@/context/lan";
 import { LocationContext } from "@/context/Location";
-import { useNetworkStatus } from "@/hooks/useNetworkStatus";
 import { useStateCode } from "@/hooks/useStateCode";
 import { TranslateText } from "@/lib/translatetext";
 import { AnnouncementType, AnnouncementsResponse } from "@/types";
 import { LinearGradient } from 'expo-linear-gradient';
+import { FunnelPlus } from "lucide-react-native";
 import { useContext, useEffect, useState } from "react";
 import { StyleSheet, View } from 'react-native';
 import { Toast } from 'toastify-react-native';
 
 export default function HomeScreen() {
-
+  const [showAuthCard, setShowAuthCard] = useState(false);
   const [visible, setVisible] = useState(false);
-  const { isOnline } = useNetworkStatus();
   const [StatesSelected, SetStatesSelected] = useState<string[]>([]);
   const [DeparmentsSelected, SetDeparmentsSelected] = useState<string>("")
   const [SearchInput, SetSearchInput] = useState<string>("");
@@ -85,6 +84,18 @@ export default function HomeScreen() {
   }
 
   useEffect(() => {
+    if (SearchInput.trim().length < 2) return;
+
+    const timer = setTimeout(() => {
+      SetIsLoading(true);
+      const controller = new AbortController();
+      fetchGetIndiaAnnouncements(1, false, controller.signal);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [SearchInput]);
+
+  useEffect(() => {
     const controller = new AbortController();
     Setpage(1);
     fetchGetIndiaAnnouncements(1, false, controller.signal);
@@ -128,8 +139,6 @@ export default function HomeScreen() {
     }
   }
 
-
-
   return (
     <View style={styles.container}>
       <View style={StyleSheet.absoluteFill} pointerEvents="none">
@@ -146,12 +155,19 @@ export default function HomeScreen() {
         style={styles.contentLayer}
       >
         <View style={{ gap: 10 }}>
-          <Header />
           <HeadingAndTitle />
-          <InputToggole
-            visible={visible}
-            setVisible={setVisible}
-          />
+          <View style={styles.InputWrapper}>
+            <Input
+              SearchInput={SearchInput}
+              SetSearchInput={SetSearchInput}
+            />
+            <FunnelPlus
+              size={24}
+              color="#4b5563"
+              onPress={() => setVisible(true)}
+              style={styles.FilterIcon}
+            />
+          </View>
         </View>
         {
           visible &&
@@ -167,6 +183,13 @@ export default function HomeScreen() {
             onSearch={handleSearch}
           />
         }
+        {showAuthCard
+          &&
+          <AuthCard
+            showAuthCard={showAuthCard}
+            setShowAuthCard={setShowAuthCard}
+          />
+        }
         <Annoucements
           Annoucements={Announcements}
           IsLoading={IsLoading}
@@ -174,6 +197,8 @@ export default function HomeScreen() {
           page={page}
           totalPages={totalPages}
           IsLoadingMore={IsLoadingMore}
+          showAuthCard={showAuthCard}
+          setShowAuthCard={setShowAuthCard}
         />
       </View>
     </View>
@@ -194,4 +219,13 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     gap: 18,
   },
+  InputWrapper: {
+    display: "flex",
+    alignItems: "center",
+    flexDirection: "row",
+    gap: 0
+  },
+  FilterIcon: {
+    marginRight: "auto"
+  }
 });

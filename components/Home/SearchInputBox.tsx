@@ -3,18 +3,45 @@ import { Currentdate } from '@/context/Currentdate';
 import { lanContext } from '@/context/lan';
 import { TranslateText } from '@/lib/translatetext';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Building2, Calendar as CalendarIcon, ChevronDown, ChevronRight, MapPin, Search } from 'lucide-react-native';
+import { Building2, Calendar as CalendarIcon, ChevronDown, MapPin } from 'lucide-react-native';
 import React, { useContext, useEffect, useState } from 'react';
-import {
-    FlatList,
-    Platform,
-    Pressable,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
-} from 'react-native';
+import { FlatList, Platform, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+const COLORS = {
+    primary: '#EAB308',        // Main yellow/amber
+    primaryLight: '#FDE047',   // Lighter yellow for subtle highlights
+    primaryDark: '#CA8A04',    // Darker yellow for pressed states
+    primaryAlpha: 'rgba(234, 179, 8, 0.08)', // Transparent yellow for backgrounds
+
+    text: {
+        primary: '#111827',      // Main text color
+        secondary: '#6B7280',    // Secondary/muted text
+        placeholder: '#9CA3AF',  // Placeholder text
+        white: '#FFFFFF',        // White text for colored backgrounds
+        onPrimary: '#78350F',    // Dark amber text for yellow backgrounds (better contrast)
+    },
+
+    background: {
+        primary: '#FFFFFF',      // White background
+        secondary: '#F9FAFB',    // Light gray background
+        tertiary: '#F3F4F6',     // Lighter gray
+        hover: '#FAFBFC',        // Subtle hover state
+    },
+
+    border: {
+        light: '#F3F4F6',        // Lightest border
+        default: '#E5E7EB',      // Default border
+        medium: '#D1D5DB',       // Medium border
+        dark: '#9CA3AF',         // Darker border
+    },
+
+    state: {
+        selected: '#EAB308',     // Selected state (primary)
+        hover: '#F3F4F6',        // Hover state
+        pressed: '#E5E7EB',      // Pressed state
+        disabled: '#F9FAFB',     // Disabled state
+    }
+};
 
 interface RegionOption {
     label: string;
@@ -26,8 +53,6 @@ type SearchInputboxProps = {
     SetStatesSelected: React.Dispatch<React.SetStateAction<string[]>>;
     DeparmentsSelected: string;
     SetDeparmentsSelected: React.Dispatch<React.SetStateAction<string>>;
-    SearchInput: string;
-    SetSearchInput: React.Dispatch<React.SetStateAction<string>>;
     onSearch: () => void;
 };
 
@@ -36,8 +61,6 @@ const SearchInputbox: React.FC<SearchInputboxProps> = ({
     SetStatesSelected,
     DeparmentsSelected,
     SetDeparmentsSelected,
-    SearchInput,
-    SetSearchInput,
     onSearch,
 }) => {
     const [options, setOptions] = useState<string[]>([]);
@@ -73,10 +96,8 @@ const SearchInputbox: React.FC<SearchInputboxProps> = ({
     const toggleAllRegions = () => {
         const allRegionValues = TranslateText[lan].MULTISELECT_OPTIONS.map((item: RegionOption) => item.value);
         if (StatesSelected.length === allRegionValues.length) {
-            // If all selected, deselect all
             SetStatesSelected([]);
         } else {
-            // Select all
             SetStatesSelected(allRegionValues);
         }
     };
@@ -123,7 +144,6 @@ const SearchInputbox: React.FC<SearchInputboxProps> = ({
 
     const renderRegionOption = ({ item }: { item: RegionOption }) => {
         const isSelected = StatesSelected.includes(item.value);
-
         return (
             <TouchableOpacity
                 style={[
@@ -133,20 +153,17 @@ const SearchInputbox: React.FC<SearchInputboxProps> = ({
                 onPress={() => toggleRegion(item.value)}
                 activeOpacity={0.7}
             >
-                <View
-                    style={[
-                        styles.checkbox,
-                        isSelected && styles.checkboxChecked,
-                    ]}
-                >
+                <View style={[styles.checkbox, isSelected && styles.checkboxChecked]}>
                     {isSelected && (
                         <Text style={styles.checkmark}>✓</Text>
                     )}
                 </View>
-                <Text style={[
-                    styles.dropdownOptionText,
-                    isSelected && styles.dropdownOptionTextSelected,
-                ]}>
+                <Text
+                    style={[
+                        styles.dropdownOptionText,
+                        isSelected && styles.dropdownOptionTextSelected,
+                    ]}
+                >
                     {item.label}
                 </Text>
             </TouchableOpacity>
@@ -156,7 +173,6 @@ const SearchInputbox: React.FC<SearchInputboxProps> = ({
     const renderDepartmentOption = ({ item, index }: { item: string; index: number }) => {
         if (index === 0) {
             const isSelected = !DeparmentsSelected;
-
             return (
                 <TouchableOpacity
                     style={[
@@ -166,20 +182,17 @@ const SearchInputbox: React.FC<SearchInputboxProps> = ({
                     onPress={() => handleDepartmentSelect('')}
                     activeOpacity={0.7}
                 >
-                    <View
-                        style={[
-                            styles.checkbox,
-                            isSelected && styles.checkboxChecked,
-                        ]}
-                    >
+                    <View style={[styles.checkbox, isSelected && styles.checkboxChecked]}>
                         {isSelected && (
                             <Text style={styles.checkmark}>✓</Text>
                         )}
                     </View>
-                    <Text style={[
-                        styles.dropdownOptionText,
-                        isSelected && styles.dropdownOptionTextSelected,
-                    ]}>
+                    <Text
+                        style={[
+                            styles.dropdownOptionText,
+                            isSelected && styles.dropdownOptionTextSelected,
+                        ]}
+                    >
                         {TranslateText[lan].ALL_DEPARMENTS}
                     </Text>
                 </TouchableOpacity>
@@ -188,7 +201,6 @@ const SearchInputbox: React.FC<SearchInputboxProps> = ({
 
         const dept = item;
         const isSelected = DeparmentsSelected === dept;
-
         return (
             <TouchableOpacity
                 style={[
@@ -198,20 +210,17 @@ const SearchInputbox: React.FC<SearchInputboxProps> = ({
                 onPress={() => handleDepartmentSelect(dept)}
                 activeOpacity={0.7}
             >
-                <View
-                    style={[
-                        styles.checkbox,
-                        isSelected && styles.checkboxChecked,
-                    ]}
-                >
+                <View style={[styles.checkbox, isSelected && styles.checkboxChecked]}>
                     {isSelected && (
                         <Text style={styles.checkmark}>✓</Text>
                     )}
                 </View>
-                <Text style={[
-                    styles.dropdownOptionText,
-                    isSelected && styles.dropdownOptionTextSelected,
-                ]}>
+                <Text
+                    style={[
+                        styles.dropdownOptionText,
+                        isSelected && styles.dropdownOptionTextSelected,
+                    ]}
+                >
                     {dept}
                 </Text>
             </TouchableOpacity>
@@ -222,21 +231,6 @@ const SearchInputbox: React.FC<SearchInputboxProps> = ({
 
     return (
         <View style={styles.container}>
-            {/* Keyword Search */}
-            <View style={styles.section}>
-                <Text style={styles.label}>{TranslateText[lan].KEYWORDS}</Text>
-                <View style={styles.searchInputContainer}>
-                    <Search size={18} color="#9CA3AF" style={styles.searchIcon} />
-                    <TextInput
-                        style={styles.searchInput}
-                        placeholder={TranslateText[lan].INPUT_PLACEHOLDER}
-                        placeholderTextColor="#9CA3AF"
-                        value={SearchInput}
-                        onChangeText={SetSearchInput}
-                    />
-                </View>
-            </View>
-
             {/* Region Multi-Select */}
             <View style={styles.section}>
                 <Text style={styles.label}>{TranslateText[lan].REGION}</Text>
@@ -252,7 +246,7 @@ const SearchInputbox: React.FC<SearchInputboxProps> = ({
                     }}
                 >
                     <View style={styles.selectButtonContent}>
-                        <MapPin size={18} color={showRegionPicker ? '#3B82F6' : '#9CA3AF'} style={styles.selectButtonIcon} />
+                        <MapPin size={20} color={showRegionPicker ? COLORS.primary : COLORS.text.secondary} style={styles.selectButtonIcon} />
                         <Text
                             style={[
                                 styles.selectButtonText,
@@ -264,12 +258,9 @@ const SearchInputbox: React.FC<SearchInputboxProps> = ({
                         </Text>
                     </View>
                     <ChevronDown
-                        size={18}
-                        color={showRegionPicker ? '#3B82F6' : '#9CA3AF'}
-                        style={[
-                            styles.chevron,
-                            showRegionPicker && styles.chevronRotated,
-                        ]}
+                        size={20}
+                        color={showRegionPicker ? COLORS.primary : COLORS.text.secondary}
+                        style={[styles.chevron, showRegionPicker && styles.chevronRotated]}
                     />
                 </Pressable>
 
@@ -284,9 +275,9 @@ const SearchInputbox: React.FC<SearchInputboxProps> = ({
                                             ? 'All regions selected'
                                             : `${StatesSelected.length} selected`}
                                 </Text>
-                                <Pressable onPress={closeAllDropdowns}>
+                                <TouchableOpacity onPress={closeAllDropdowns}>
                                     <Text style={styles.doneButton}>Done</Text>
-                                </Pressable>
+                                </TouchableOpacity>
                             </View>
 
                             {/* All Regions Option */}
@@ -299,21 +290,18 @@ const SearchInputbox: React.FC<SearchInputboxProps> = ({
                                 onPress={toggleAllRegions}
                                 activeOpacity={0.7}
                             >
-                                <View
-                                    style={[
-                                        styles.checkbox,
-                                        isAllRegionsSelected && styles.checkboxChecked,
-                                    ]}
-                                >
+                                <View style={[styles.checkbox, isAllRegionsSelected && styles.checkboxChecked]}>
                                     {isAllRegionsSelected && (
                                         <Text style={styles.checkmark}>✓</Text>
                                     )}
                                 </View>
-                                <Text style={[
-                                    styles.dropdownOptionText,
-                                    styles.allRegionsText,
-                                    isAllRegionsSelected && styles.dropdownOptionTextSelected,
-                                ]}>
+                                <Text
+                                    style={[
+                                        styles.dropdownOptionText,
+                                        styles.allRegionsText,
+                                        isAllRegionsSelected && styles.dropdownOptionTextSelected,
+                                    ]}
+                                >
                                     All Regions
                                 </Text>
                             </TouchableOpacity>
@@ -351,7 +339,7 @@ const SearchInputbox: React.FC<SearchInputboxProps> = ({
                     }}
                 >
                     <View style={styles.selectButtonContent}>
-                        <Building2 size={18} color={showDepartmentPicker ? '#3B82F6' : '#9CA3AF'} style={styles.selectButtonIcon} />
+                        <Building2 size={20} color={showDepartmentPicker ? COLORS.primary : COLORS.text.secondary} style={styles.selectButtonIcon} />
                         <Text
                             style={[
                                 styles.selectButtonText,
@@ -363,12 +351,9 @@ const SearchInputbox: React.FC<SearchInputboxProps> = ({
                         </Text>
                     </View>
                     <ChevronDown
-                        size={18}
-                        color={showDepartmentPicker ? '#3B82F6' : '#9CA3AF'}
-                        style={[
-                            styles.chevron,
-                            showDepartmentPicker && styles.chevronRotated,
-                        ]}
+                        size={20}
+                        color={showDepartmentPicker ? COLORS.primary : COLORS.text.secondary}
+                        style={[styles.chevron, showDepartmentPicker && styles.chevronRotated]}
                     />
                 </Pressable>
 
@@ -376,13 +361,12 @@ const SearchInputbox: React.FC<SearchInputboxProps> = ({
                     <View style={styles.dropdownContainer}>
                         <View style={styles.dropdown}>
                             <View style={styles.dropdownHeader}>
-                                <Text style={styles.dropdownHeaderText}>
-                                    Select department
-                                </Text>
-                                <Pressable onPress={closeAllDropdowns}>
+                                <Text style={styles.dropdownHeaderText}>Select department</Text>
+                                <TouchableOpacity onPress={closeAllDropdowns}>
                                     <Text style={styles.doneButton}>Done</Text>
-                                </Pressable>
+                                </TouchableOpacity>
                             </View>
+
                             <FlatList
                                 data={['', ...options]}
                                 renderItem={renderDepartmentOption}
@@ -409,7 +393,7 @@ const SearchInputbox: React.FC<SearchInputboxProps> = ({
                         ]}
                         onPress={() => setShowStartDatePicker(true)}
                     >
-                        <CalendarIcon size={16} color="#9CA3AF" style={styles.calendarIcon} />
+                        <CalendarIcon size={20} color={COLORS.text.secondary} style={styles.calendarIcon} />
                         <Text style={styles.dateButtonText}>
                             {startdate ? startdate.toLocaleDateString() : 'From'}
                         </Text>
@@ -422,7 +406,7 @@ const SearchInputbox: React.FC<SearchInputboxProps> = ({
                         ]}
                         onPress={() => setShowEndDatePicker(true)}
                     >
-                        <CalendarIcon size={16} color="#9CA3AF" style={styles.calendarIcon} />
+                        <CalendarIcon size={20} color={COLORS.text.secondary} style={styles.calendarIcon} />
                         <Text style={styles.dateButtonText}>
                             {endDate ? endDate.toLocaleDateString() : 'To'}
                         </Text>
@@ -457,7 +441,6 @@ const SearchInputbox: React.FC<SearchInputboxProps> = ({
                 onPress={onSearch}
             >
                 <Text style={styles.searchButtonText}>{TranslateText[lan].SEARCH}</Text>
-                <ChevronRight size={20} color="#FFFFFF" />
             </Pressable>
         </View>
     );
@@ -475,45 +458,27 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontWeight: '700',
         textTransform: 'uppercase',
-        color: '#9CA3AF',
+        color: COLORS.text.secondary,
         letterSpacing: 1.5,
         marginLeft: 4,
-    },
-    searchInputContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        height: 56,
-        backgroundColor: '#F9FAFB',
-        borderRadius: 16,
-        paddingHorizontal: 16,
-        borderWidth: 1,
-        borderColor: '#F3F4F6',
-    },
-    searchIcon: {
-        marginRight: 8,
-    },
-    searchInput: {
-        flex: 1,
-        fontSize: 16,
-        color: '#111827',
     },
     selectButton: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         minHeight: 56,
-        backgroundColor: '#F9FAFB',
+        backgroundColor: COLORS.background.secondary,
         borderRadius: 16,
         paddingHorizontal: 16,
         borderWidth: 1,
-        borderColor: '#E5E7EB',
+        borderColor: COLORS.border.default,
     },
     selectButtonPressed: {
-        backgroundColor: '#F3F4F6',
+        backgroundColor: COLORS.state.pressed,
     },
     selectButtonActive: {
-        borderColor: '#3B82F6',
-        backgroundColor: '#EFF6FF',
+        borderColor: COLORS.primary,
+        backgroundColor: COLORS.primaryAlpha,
     },
     selectButtonContent: {
         flexDirection: 'row',
@@ -527,14 +492,14 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 14,
         fontWeight: '600',
-        color: '#111827',
-        fontFamily: "Poppins_500Medium"
+        color: COLORS.text.primary,
+        fontFamily: 'Poppins_500Medium',
     },
     selectButtonTextActive: {
-        color: '#3B82F6',
+        color: COLORS.primary,
     },
     selectButtonPlaceholder: {
-        color: '#9CA3AF',
+        color: COLORS.text.placeholder,
     },
     chevron: {
         marginLeft: 8,
@@ -547,14 +512,14 @@ const styles = StyleSheet.create({
         marginBottom: 16,
     },
     dropdown: {
-        backgroundColor: '#FFFFFF',
+        backgroundColor: COLORS.background.primary,
         borderRadius: 16,
         height: 280,
         borderWidth: 1,
-        borderColor: '#E5E7EB',
+        borderColor: COLORS.border.default,
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.1,
+        shadowOpacity: 0.08,
         shadowRadius: 12,
         elevation: 8,
     },
@@ -563,29 +528,30 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingHorizontal: 16,
-        paddingVertical: 12,
+        paddingVertical: 14,
         borderBottomWidth: 1,
-        borderBottomColor: '#F3F4F6',
-        backgroundColor: '#FAFBFC',
+        borderBottomColor: COLORS.border.light,
+        backgroundColor: COLORS.background.hover,
         borderTopLeftRadius: 16,
         borderTopRightRadius: 16,
     },
     dropdownHeaderText: {
         fontSize: 12,
         fontWeight: '600',
-        color: '#6B7280',
+        color: COLORS.text.secondary,
         textTransform: 'uppercase',
         letterSpacing: 0.5,
-        fontFamily: "Poppins_500Medium"
+        fontFamily: 'Poppins_500Medium',
     },
     doneButton: {
         fontSize: 14,
-        fontWeight: '600',
-        color: '#3B82F6',
+        fontWeight: '700',
+        color: COLORS.primary,
+        fontFamily: 'Poppins_500Medium',
     },
     allRegionsOption: {
         borderBottomWidth: 1,
-        borderBottomColor: '#F3F4F6',
+        borderBottomColor: COLORS.border.light,
         marginBottom: 4,
         paddingBottom: 16,
     },
@@ -594,7 +560,7 @@ const styles = StyleSheet.create({
     },
     separator: {
         height: 1,
-        backgroundColor: '#E5E7EB',
+        backgroundColor: COLORS.border.default,
         marginHorizontal: 8,
         marginVertical: 4,
     },
@@ -611,24 +577,24 @@ const styles = StyleSheet.create({
         marginVertical: 2,
     },
     dropdownOptionSelected: {
-        backgroundColor: '#EFF6FF',
+        backgroundColor: COLORS.primaryAlpha,
     },
     checkbox: {
         width: 22,
         height: 22,
         borderRadius: 6,
         borderWidth: 2,
-        borderColor: '#D1D5DB',
+        borderColor: COLORS.border.medium,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#FFFFFF',
+        backgroundColor: COLORS.background.primary,
     },
     checkboxChecked: {
-        backgroundColor: '#3B82F6',
-        borderColor: '#3B82F6',
+        backgroundColor: COLORS.primary,
+        borderColor: COLORS.primary,
     },
     checkmark: {
-        color: '#FFFFFF',
+        color: COLORS.text.white,
         fontSize: 13,
         fontWeight: '700',
     },
@@ -636,11 +602,11 @@ const styles = StyleSheet.create({
         flex: 1,
         fontSize: 15,
         fontWeight: '500',
-        color: '#374151',
-        fontFamily: "Poppins_400Regular"
+        color: COLORS.text.primary,
+        fontFamily: 'Poppins_400Regular',
     },
     dropdownOptionTextSelected: {
-        color: '#1E40AF',
+        color: COLORS.primary,
         fontWeight: '600',
     },
     dateRangeContainer: {
@@ -652,14 +618,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         height: 56,
-        backgroundColor: '#F9FAFB',
+        backgroundColor: COLORS.background.secondary,
         borderRadius: 16,
         borderWidth: 1,
-        borderColor: '#E5E7EB',
+        borderColor: COLORS.border.default,
         paddingHorizontal: 16,
     },
     dateButtonPressed: {
-        backgroundColor: '#F3F4F6',
+        backgroundColor: COLORS.state.pressed,
     },
     calendarIcon: {
         marginRight: 8,
@@ -667,33 +633,34 @@ const styles = StyleSheet.create({
     dateButtonText: {
         fontSize: 14,
         fontWeight: '500',
-        color: '#111827',
-        fontFamily: "Poppins_500Medium"
+        color: COLORS.text.primary,
+        fontFamily: 'Poppins_500Medium',
     },
     searchButton: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
         height: 56,
-        backgroundColor: '#EAB308',
+        backgroundColor: COLORS.primary,
         borderRadius: 16,
         gap: 8,
-        shadowColor: '#EAB308',
+        shadowColor: '#000',
         shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.3,
+        shadowOpacity: 0.15,
         shadowRadius: 12,
         elevation: 6,
     },
     searchButtonPressed: {
         transform: [{ scale: 0.98 }],
         opacity: 0.9,
+        backgroundColor: COLORS.primaryDark,
     },
     searchButtonText: {
         fontSize: 16,
         fontWeight: '700',
-        color: '#FFFFFF',
+        color: COLORS.text.white,
         letterSpacing: 0.5,
-        fontFamily: "Poppins_500Medium"
+        fontFamily: 'Poppins_500Medium',
     },
 });
 

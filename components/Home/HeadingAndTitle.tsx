@@ -26,7 +26,8 @@ const HeadingAndTitle: React.FC = () => {
 const styles = StyleSheet.create({
     container: {
         display: "flex",
-        flexDirection: "column"
+        flexDirection: "column",
+        marginTop: 20,
     },
     TextTitleAndDes: {
         display: "flex",

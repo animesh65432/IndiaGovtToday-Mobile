@@ -107,7 +107,6 @@ const ShowFilter: React.FC<Props> = ({
                         </Pressable>
                     </View>
 
-                    {/* Content - ScrollView for scrolling, dropdowns are absolute positioned */}
                     <View
                         style={styles.scrollView}
                     >
@@ -116,8 +115,6 @@ const ShowFilter: React.FC<Props> = ({
                             SetStatesSelected={SetStatesSelected}
                             DeparmentsSelected={DeparmentsSelected}
                             SetDeparmentsSelected={SetDeparmentsSelected}
-                            SearchInput={SearchInput}
-                            SetSearchInput={SetSearchInput}
                             onSearch={() => {
                                 onSearch();
                                 onClose();

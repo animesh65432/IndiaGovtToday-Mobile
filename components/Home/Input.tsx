@@ -5,16 +5,12 @@ import React, { useContext } from 'react';
 import { StyleSheet, TextInput, View } from 'react-native';
 
 type Props = {
-    visible: boolean;
-    setVisible: React.Dispatch<React.SetStateAction<boolean>>;
+    SearchInput: string,
+    SetSearchInput: React.Dispatch<React.SetStateAction<string>>,
 };
 
-const InputToggle: React.FC<Props> = ({ setVisible }) => {
+const Input: React.FC<Props> = ({ SearchInput, SetSearchInput }) => {
     const { lan } = useContext(lanContext);
-
-    const handlePress = () => {
-        setVisible(true);
-    };
 
     return (
         <View style={styles.InputContainer}>
@@ -27,7 +23,8 @@ const InputToggle: React.FC<Props> = ({ setVisible }) => {
                 style={styles.Input}
                 placeholder={TranslateText[lan].INPUT_PLACEHOLDER}
                 placeholderTextColor="#999"
-                onPress={handlePress}
+                onChange={(e) => SetSearchInput(e.nativeEvent.text)}
+                value={SearchInput}
             />
         </View>
     );
@@ -59,4 +56,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default InputToggle;
+export default Input;
