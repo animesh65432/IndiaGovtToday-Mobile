@@ -1,9 +1,11 @@
 import { lanContext } from '@/context/lan';
 import { usetexttospech } from "@/hooks/usetexttospech";
+import { TranslateText } from '@/lib/translatetext';
 import { ShowAnnouncementTypes } from "@/types";
-import { Pause, Play, Share2, Square, Volume2 } from "lucide-react-native";
+import { router } from 'expo-router';
+import { ArrowLeft, Pause, Play, Share2, Square, Volume2 } from "lucide-react-native";
 import React, { useContext } from 'react';
-import { ActivityIndicator, StyleSheet, TouchableOpacity, View } from "react-native";
+import { ActivityIndicator, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 type Props = {
     toggleShare: boolean,
@@ -15,9 +17,6 @@ type Props = {
 const Header: React.FC<Props> = ({ setToggleShare, Annoucment, audioHook }) => {
     const { lan } = useContext(lanContext);
     const { call, stop, togglePlayPause, IsLoading, isPlaying, isPaused } = audioHook
-
-    // Rest of your code stays the same
-    console.log('Header render - State:', { IsLoading, isPlaying, isPaused })
 
     const handleAudioAction = async () => {
         console.log('handleAudioAction called')
@@ -57,9 +56,11 @@ const Header: React.FC<Props> = ({ setToggleShare, Annoucment, audioHook }) => {
         return <Volume2 size={24} color="#2d2d2d" />
     }
 
+    console.log(TranslateText[lan].BACK)
+
     return (
         <View style={styles.container}>
-            {/* <Pressable
+            <Pressable
                 onPress={() => router.back()}
                 style={({ pressed }) => [{ opacity: pressed ? 0.5 : 1 }]}
             >
@@ -67,7 +68,7 @@ const Header: React.FC<Props> = ({ setToggleShare, Annoucment, audioHook }) => {
                     <ArrowLeft size={14} color="black" />
                     <Text style={styles.backText}>{TranslateText[lan].BACK}</Text>
                 </View>
-            </Pressable> */}
+            </Pressable>
 
             <View style={styles.controlsContainer}>
                 <TouchableOpacity
@@ -109,7 +110,7 @@ const styles = StyleSheet.create({
         marginRight: "auto",
         marginTop: 50,
         flexDirection: "row",
-        justifyContent: "flex-end",
+        justifyContent: "space-between",
         alignItems: "center",
     },
     backButton: {

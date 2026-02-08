@@ -20,10 +20,9 @@ const Save = () => {
     const [announcements, setAnnouncements] = useState<AnnouncementType[]>([])
 
     const fetchSavedAnnouncements = async (append = false, page = 1, limit = 10, lan: string) => {
-        if (!append) {
+        if (append) {
             SetIsLoadingMore(true)
-        }
-        else {
+        } else {
             setIsLoading(true);
         }
 
@@ -67,7 +66,7 @@ const Save = () => {
 
     useEffect(() => {
         fetchSavedAnnouncements(false, page, totalPages, lan);
-    }, [token, IsRemoved, DoesItadd])
+    }, [token, IsRemoved, DoesItadd, lan])
 
     return (
         <View style={styles.container}>
