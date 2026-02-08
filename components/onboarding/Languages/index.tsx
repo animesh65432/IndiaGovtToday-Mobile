@@ -1,5 +1,6 @@
+import { lanContext } from "@/context/lan";
 import { ArrowRight } from "lucide-react-native";
-import React, { useState } from 'react';
+import React, { useContext } from 'react';
 import { Dimensions, FlatList, Pressable, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { LanguageOptions } from "../../../lib/lan";
 
@@ -9,14 +10,14 @@ type props = {
 const { width } = Dimensions.get('window');
 
 const Languages: React.FC<props> = ({ handlePageChange }) => {
-    const [selectedLanguage, setSelectedLanguage] = useState<string>('English');
+    const { lan, setLan } = useContext(lanContext)
 
     const selectLanguage = (language: string) => {
-        setSelectedLanguage(language);
+        setLan(language);
     };
 
     const isLanguageSelected = (language: string) => {
-        return selectedLanguage === language;
+        return lan === language;
     };
 
     const renderLanguageOption = ({ item }: { item: { label: string, value: string } }) => {

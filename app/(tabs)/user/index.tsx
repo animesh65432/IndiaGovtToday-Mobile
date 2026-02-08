@@ -1,19 +1,18 @@
+import { lanContext } from "@/context/lan"
 import { User as userContext } from "@/context/user"
 import { Globe, LogOut, User2 } from "lucide-react-native"
-import React, { useState } from 'react'
+import React, { useContext } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Dropdown } from "react-native-element-dropdown"
 
 const User = () => {
-    const { name, email, isLoggedIn, SignOut } = React.useContext(userContext)
-    const [selectedLanguage, setSelectedLanguage] = useState("English")
+    const { name, email, isLoggedIn, SignOut } = useContext(userContext)
+    const { lan, setLan } = useContext(lanContext)
 
     const languageData = Languages.map(lang => ({
         label: lang,
         value: lang
     }))
-
-    console.log("User Context:", { name, email, isLoggedIn })
 
     return (
         <View style={styles.container}>
@@ -54,9 +53,9 @@ const User = () => {
                         labelField="label"
                         valueField="value"
                         placeholder="Select Language"
-                        value={selectedLanguage}
+                        value={lan}
                         onChange={item => {
-                            setSelectedLanguage(item.value)
+                            setLan(item.value)
                         }}
                     />
                 </View>

@@ -16,9 +16,12 @@ type Props = {
     IsLoadingMore: boolean
     showAuthCard: boolean
     setShowAuthCard: React.Dispatch<React.SetStateAction<boolean>>
+    IsSavedbuttonShown?: boolean
+    IsRemoved?: boolean
+    SetIsRemoved?: React.Dispatch<React.SetStateAction<boolean>>
 }
 
-const Annoucements: React.FC<Props> = ({ IsLoadingMore, Annoucements, OnLoadMoredata, IsLoading, page, totalPages, showAuthCard, setShowAuthCard }) => {
+const Annoucements: React.FC<Props> = ({ SetIsRemoved, IsRemoved, IsSavedbuttonShown, IsLoadingMore, Annoucements, OnLoadMoredata, IsLoading, page, totalPages, showAuthCard, setShowAuthCard }) => {
     const { lan } = useContext(lanContext);
 
     // Show skeletons only on initial load (page 1 and no announcements yet)
@@ -33,6 +36,7 @@ const Annoucements: React.FC<Props> = ({ IsLoadingMore, Annoucements, OnLoadMore
             </View>
         )
     }
+
     return (
         <ScrollView style={style.Container}>
             <View style={style.Inner}>
@@ -47,6 +51,9 @@ const Annoucements: React.FC<Props> = ({ IsLoadingMore, Annoucements, OnLoadMore
                             key={item.announcementId}
                             showAuthCard={showAuthCard}
                             setShowAuthCard={setShowAuthCard}
+                            IsSavedbuttonShown={IsSavedbuttonShown}
+                            IsRemoved={IsRemoved}
+                            SetIsRemoved={SetIsRemoved}
                         />
                     ))
                 )}

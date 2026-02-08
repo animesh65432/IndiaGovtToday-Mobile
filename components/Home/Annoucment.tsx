@@ -1,4 +1,5 @@
-import { addsave } from "@/api/save";
+import { addsave, removesave } from "@/api/save";
+import { AnnouncementContext } from "@/context/Annoucment";
 import { lanContext } from "@/context/lan";
 import { User as UserContext } from "@/context/user";
 import { formatDateRelative } from "@/lib/fromDate";
@@ -6,19 +7,24 @@ import { LANGUAGE_CODES } from "@/lib/lan";
 import { TranslateText } from "@/lib/translatetext";
 import { AnnouncementType } from "@/types";
 import { useRouter } from 'expo-router';
-import { ArrowRight, Bookmark, Clock, Landmark } from 'lucide-react-native';
+import { ArrowRight, Bookmark, Clock, Landmark, X } from 'lucide-react-native';
 import React, { useContext } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Toast } from "toastify-react-native";
 
 type Props = {
     announcement: AnnouncementType;
     showAuthCard: boolean
-    setShowAuthCard: React.Dispatch<React.SetStateAction<boolean>>
+    setShowAuthCard: React.Dispatch<React.SetStateAction<boolean>>;
+    IsSavedbuttonShown?: boolean
+    IsRemoved?: boolean
+    SetIsRemoved?: React.Dispatch<React.SetStateAction<boolean>>
 };
 
-const Announcement: React.FC<Props> = ({ announcement, setShowAuthCard }) => {
+const Announcement: React.FC<Props> = ({ SetIsRemoved, IsRemoved, announcement, setShowAuthCard, IsSavedbuttonShown = true }) => {
     const router = useRouter();
     const { lan } = useContext(lanContext);
+    const { DoesItadd, SetDoesItadd } = useContext(AnnouncementContext);
     const { isLoggedIn, token, } = useContext(UserContext);
 
     const handleBookmark = async () => {
@@ -27,10 +33,30 @@ const Announcement: React.FC<Props> = ({ announcement, setShowAuthCard }) => {
             return
         }
         else {
-            const response = await addsave(token, announcement.announcementId);
-            console.log(response)
+            const response = await addsave(token, announcement.announcementId) as Response;
+            if (response.status === 200) {
+                Toast.success("Announcement added to saved list");
+                if (SetDoesItadd) {
+                    SetDoesItadd(!DoesItadd)
+                }
+            }
         }
-    }
+
+    };
+
+    const handleRemoveBookmark = async () => {
+        if (!isLoggedIn) {
+            setShowAuthCard(true);
+            return
+        }
+        else {
+            await removesave(token, announcement.announcementId);
+            if (SetIsRemoved) {
+                SetIsRemoved(!IsRemoved)
+            }
+            Toast.success("Announcement removed from saved list");
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -39,7 +65,10 @@ const Announcement: React.FC<Props> = ({ announcement, setShowAuthCard }) => {
                     <View style={styles.departmentBadge}>
                         <Text style={styles.departmentText}>{announcement.department}</Text>
                     </View>
-                    <Bookmark size={20} color="black" onPress={handleBookmark} />
+                    {IsSavedbuttonShown ?
+                        <Bookmark size={20} color="black" onPress={handleBookmark} /> :
+                        <X size={20} color="black" onPress={handleRemoveBookmark} />
+                    }
                 </View>
 
                 <View style={styles.timeRow}>

@@ -32,7 +32,7 @@ const Input: React.FC<Props> = ({ SearchInput, SetSearchInput }) => {
 
 const styles = StyleSheet.create({
     InputContainer: {
-        width: "90%",
+        width: "80%",
         marginLeft: "auto",
         marginRight: "auto",
         position: "relative",

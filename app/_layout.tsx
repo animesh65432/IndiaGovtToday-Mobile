@@ -1,3 +1,4 @@
+import { AnnouncementProvider } from "@/context/Annoucment";
 import LocationProvider from "@/context/Location";
 import { OnboardingProvider } from "@/context/OnBoardingProvider";
 import LanguageProvider from "@/context/Provider";
@@ -47,18 +48,20 @@ export default function RootLayout() {
 
   return (
     <OnboardingProvider>
-      <UserProvider>
-        <LanguageProvider>
-          <LocationProvider>
-            <Stack>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
-            </Stack>
-            <ToastManager />
-            <StatusBar style="auto" />
-          </LocationProvider>
-        </LanguageProvider>
-      </UserProvider>
+      <AnnouncementProvider>
+        <UserProvider>
+          <LanguageProvider>
+            <LocationProvider>
+              <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
+              </Stack>
+              <ToastManager />
+              <StatusBar style="auto" />
+            </LocationProvider>
+          </LanguageProvider>
+        </UserProvider>
+      </AnnouncementProvider>
     </OnboardingProvider>
   );
 }

@@ -42,6 +42,8 @@ export const UserProvider: React.FC<Props> = ({ children }) => {
 
     const [request, response, promptAsync] = Google.useAuthRequest({
         webClientId: GoogleClientId,
+        androidClientId: GoogleClientId,
+        iosClientId: GoogleClientId,
     });
 
     const GetUserProfileFromCache = async () => {

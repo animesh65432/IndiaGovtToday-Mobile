@@ -226,6 +226,6 @@ const styles = StyleSheet.create({
     gap: 0
   },
   FilterIcon: {
-    marginRight: "auto"
+    marginRight: 20
   }
 });

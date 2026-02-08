@@ -14,15 +14,15 @@ export const addsave = (token: string, announcementId: string) => Call({
 
 export const removesave = (id: string, token: string) => Call({
     method: "DELETE",
-    path: `/removeSave/${id}`,
+    path: `/removeSave?announcementId=${id}`,
     headers: {
         "Authorization": `Bearer ${token}`
     }
 })
-export const GetallSaves = (token: string) => Call({
+export const GetallSaves = (token: string, lan: string, page: number, totalPages: number) => Call({
     method: "GET",
-    path: "/getSavedAnnouncements",
+    path: `/getSavedAnnouncements?lan=${lan}&page=${page}&limit=${totalPages}`,
     headers: {
-        "Authorization": `Bearer ${token}`
+        "Authorization": `Bearer ${token}`,
     }
 })

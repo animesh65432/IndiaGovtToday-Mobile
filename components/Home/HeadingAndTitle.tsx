@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     container: {
         display: "flex",
         flexDirection: "column",
-        marginTop: 20,
+        marginTop: 50,
     },
     TextTitleAndDes: {
         display: "flex",
