@@ -1,5 +1,6 @@
 import { lanContext } from "@/context/lan"
 import { User as userContext } from "@/context/user"
+import { TranslateText } from "@/lib/translatetext"
 import { Globe, LogOut, User2 } from "lucide-react-native"
 import React, { useContext } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
@@ -39,7 +40,7 @@ const User = () => {
                 <View style={styles.settingCard}>
                     <View style={styles.settingHeader}>
                         <Globe size={24} color="#1a1a1a" />
-                        <Text style={styles.settingTitle}>Language</Text>
+                        <Text style={styles.settingTitle}>{TranslateText[lan].LANGUAGE}</Text>
                     </View>
 
                     <Dropdown
@@ -67,7 +68,7 @@ const User = () => {
                         onPress={SignOut}
                     >
                         <LogOut size={20} color="#1a1a1a" />
-                        <Text style={styles.signOutText}>Sign Out</Text>
+                        <Text style={styles.signOutText}>{TranslateText[lan].SIGN_OUT}</Text>
                     </TouchableOpacity>
                 )}
             </View>

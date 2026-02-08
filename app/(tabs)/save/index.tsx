@@ -3,6 +3,7 @@ import Annoucements from "@/components/Home/Annoucements";
 import { AnnouncementContext } from "@/context/Annoucment";
 import { lanContext } from "@/context/lan";
 import { User as UserContext } from "@/context/user";
+import { TranslateText } from "@/lib/translatetext";
 import { AnnouncementType, AnnouncementsResponse } from "@/types";
 import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
@@ -71,7 +72,7 @@ const Save = () => {
     return (
         <View style={styles.container}>
             <View style={styles.Header}>
-                <Text style={styles.HeaderText}>Saved Announcements</Text>
+                <Text style={styles.HeaderText}>{TranslateText[lan].SAVED_ANNOUNCEMENTS}</Text>
             </View>
             <Annoucements
                 IsLoading={isLoading}

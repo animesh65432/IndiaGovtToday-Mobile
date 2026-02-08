@@ -1,4 +1,6 @@
 import { LocationContext } from "@/context/Location";
+import { lanContext } from "@/context/lan";
+import { TranslateText } from "@/lib/translatetext";
 import { MapPin } from "lucide-react-native";
 import React, { useContext, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
@@ -9,6 +11,7 @@ type Props = {
 
 const Location: React.FC<Props> = ({ onComplete }) => {
     const { fetchLocation } = useContext(LocationContext);
+    const { lan } = useContext(lanContext);
     const [isLoading, setIsLoading] = useState(false);
 
     const handleAllowLocation = async () => {
@@ -35,9 +38,9 @@ const Location: React.FC<Props> = ({ onComplete }) => {
                 </View>
 
                 <View style={styles.textContainer}>
-                    <Text style={styles.title}>Enable Location</Text>
+                    <Text style={styles.title}>{TranslateText[lan].ENABLE_LOCATION}</Text>
                     <Text style={styles.description}>
-                        Allow your location to find out nearby announcements
+                        {TranslateText[lan].ALLOW_YOUR_LOCATION_TO_FIND_OUT_NEARBY_ANNOUNCEMENTS}
                     </Text>
                 </View>
 
@@ -50,7 +53,9 @@ const Location: React.FC<Props> = ({ onComplete }) => {
                     {isLoading ? (
                         <ActivityIndicator color="#1A1A1A" />
                     ) : (
-                        <Text style={styles.buttonText}>Allow Location</Text>
+                        <Text style={styles.buttonText}>
+                            {TranslateText[lan].ALLOW_LOCATION}
+                        </Text>
                     )}
                 </TouchableOpacity>
 
@@ -60,7 +65,7 @@ const Location: React.FC<Props> = ({ onComplete }) => {
                     disabled={isLoading}
                 >
                     <Text style={[styles.skipText, isLoading && styles.skipTextDisabled]}>
-                        Skip for now
+                        {TranslateText[lan].SKIP_FOR_ME}
                     </Text>
                 </TouchableOpacity>
             </View>

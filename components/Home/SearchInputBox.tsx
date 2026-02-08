@@ -128,13 +128,13 @@ const SearchInputbox: React.FC<SearchInputboxProps> = ({
 
     const getSelectedRegionLabel = () => {
         if (StatesSelected.length === 0) {
-            return 'Select Regions';
+            return `${TranslateText[lan].SELECT_REGIONS}`;
         }
         const totalRegions = TranslateText[lan].MULTISELECT_OPTIONS.length;
         if (StatesSelected.length === totalRegions) {
-            return 'All Regions';
+            return `${TranslateText[lan].ALL_REGIONS}`;
         }
-        return `${StatesSelected.length} region${StatesSelected.length > 1 ? 's' : ''} selected`;
+        return `${StatesSelected.length} ${TranslateText[lan].REGION}  ${TranslateText[lan].SELECTED}`;
     };
 
     const closeAllDropdowns = () => {
@@ -270,13 +270,13 @@ const SearchInputbox: React.FC<SearchInputboxProps> = ({
                             <View style={styles.dropdownHeader}>
                                 <Text style={styles.dropdownHeaderText}>
                                     {StatesSelected.length === 0
-                                        ? 'Select regions'
+                                        ? `${TranslateText[lan].SELECT_REGIONS}`
                                         : isAllRegionsSelected
-                                            ? 'All regions selected'
-                                            : `${StatesSelected.length} selected`}
+                                            ? `${TranslateText[lan].ALL_REGIONS_SELECTED}`
+                                            : `${StatesSelected.length} ${TranslateText[lan].SELECTED}`}
                                 </Text>
                                 <TouchableOpacity onPress={closeAllDropdowns}>
-                                    <Text style={styles.doneButton}>Done</Text>
+                                    <Text style={styles.doneButton}>{TranslateText[lan].DONE}</Text>
                                 </TouchableOpacity>
                             </View>
 
@@ -302,7 +302,7 @@ const SearchInputbox: React.FC<SearchInputboxProps> = ({
                                         isAllRegionsSelected && styles.dropdownOptionTextSelected,
                                     ]}
                                 >
-                                    All Regions
+                                    {TranslateText[lan].ALL_REGIONS}
                                 </Text>
                             </TouchableOpacity>
 
@@ -361,9 +361,9 @@ const SearchInputbox: React.FC<SearchInputboxProps> = ({
                     <View style={styles.dropdownContainer}>
                         <View style={styles.dropdown}>
                             <View style={styles.dropdownHeader}>
-                                <Text style={styles.dropdownHeaderText}>Select department</Text>
+                                <Text style={styles.dropdownHeaderText}>{TranslateText[lan].SELECT_DEPARTMENT}</Text>
                                 <TouchableOpacity onPress={closeAllDropdowns}>
-                                    <Text style={styles.doneButton}>Done</Text>
+                                    <Text style={styles.doneButton}>{TranslateText[lan].DONE}</Text>
                                 </TouchableOpacity>
                             </View>
 
@@ -395,7 +395,7 @@ const SearchInputbox: React.FC<SearchInputboxProps> = ({
                     >
                         <CalendarIcon size={20} color={COLORS.text.secondary} style={styles.calendarIcon} />
                         <Text style={styles.dateButtonText}>
-                            {startdate ? startdate.toLocaleDateString() : 'From'}
+                            {startdate ? startdate.toLocaleDateString() : `${TranslateText[lan].FROM}`}
                         </Text>
                     </Pressable>
 
@@ -408,7 +408,7 @@ const SearchInputbox: React.FC<SearchInputboxProps> = ({
                     >
                         <CalendarIcon size={20} color={COLORS.text.secondary} style={styles.calendarIcon} />
                         <Text style={styles.dateButtonText}>
-                            {endDate ? endDate.toLocaleDateString() : 'To'}
+                            {endDate ? endDate.toLocaleDateString() : `${TranslateText[lan].TO}`}
                         </Text>
                     </Pressable>
                 </View>

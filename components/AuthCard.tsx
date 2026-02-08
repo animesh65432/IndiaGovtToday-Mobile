@@ -1,4 +1,6 @@
+import { lanContext } from "@/context/lan";
 import { User } from "@/context/user";
+import { TranslateText } from "@/lib/translatetext";
 import React, { useContext } from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Toast } from "toastify-react-native";
@@ -10,6 +12,7 @@ type Props = {
 
 const AuthCard: React.FC<Props> = ({ showAuthCard, setShowAuthCard }) => {
     const { SignIn } = useContext(User);
+    const { lan } = useContext(lanContext)
 
     const handleSignIn = async () => {
         try {
@@ -31,9 +34,9 @@ const AuthCard: React.FC<Props> = ({ showAuthCard, setShowAuthCard }) => {
         >
             <View style={styles.overlay}>
                 <View style={styles.card}>
-                    <Text style={styles.title}>Sign In Required</Text>
+                    <Text style={styles.title}>{TranslateText[lan].SIGN_IN_REQUIRED}</Text>
                     <Text style={styles.message}>
-                        To save announcements, you need to sign in first
+                        {TranslateText[lan].TO_SAVE_ANNOUNCEMENTS_YOU_NEED_TO_SIGN_IN_FIRST}
                     </Text>
 
                     <View style={styles.buttonContainer}>
@@ -41,14 +44,14 @@ const AuthCard: React.FC<Props> = ({ showAuthCard, setShowAuthCard }) => {
                             style={styles.signInButton}
                             onPress={handleSignIn}
                         >
-                            <Text style={styles.signInText}>Sign In</Text>
+                            <Text style={styles.signInText}>{TranslateText[lan].SIGN_IN}</Text>
                         </TouchableOpacity>
 
                         <TouchableOpacity
                             style={styles.cancelButton}
                             onPress={() => setShowAuthCard(false)}
                         >
-                            <Text style={styles.cancelText}>Cancel</Text>
+                            <Text style={styles.cancelText}>{TranslateText[lan].CANCEL}</Text>
                         </TouchableOpacity>
                     </View>
                 </View>

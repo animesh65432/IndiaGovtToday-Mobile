@@ -1,8 +1,10 @@
 import { OfflineNotice } from "@/components/OfflineNotice";
 import OnboardingScreen from "@/components/onboarding";
+import { lanContext } from "@/context/lan";
 import { OnboardingContext } from "@/context/OnBoardingProvider";
 import { User as UserContext } from "@/context/user";
 import { useNetworkStatus } from "@/hooks/useNetworkStatus";
+import { TranslateText } from "@/lib/translatetext";
 import { Tabs } from 'expo-router';
 import { BookMarked, Home, User } from 'lucide-react-native';
 import React, { useContext } from 'react';
@@ -10,6 +12,7 @@ import React, { useContext } from 'react';
 export default function TabLayout() {
   const { isOnline } = useNetworkStatus();
   const { hasOnboarded, setHasOnboarded } = useContext(OnboardingContext);
+  const { lan } = useContext(lanContext);
   const { isLoggedIn } = useContext(UserContext)
 
   if (!isOnline) {
@@ -31,7 +34,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: `${TranslateText[lan].HOME}`,
           tabBarIcon: ({ color, size }) => <Home color={color} size={size} />,
         }}
       />
@@ -45,7 +48,7 @@ export default function TabLayout() {
         <Tabs.Screen
           name="save/index"
           options={{
-            title: 'Saved',
+            title: `${TranslateText[lan].SAVED}`,
             tabBarIcon: ({ color, size }) => <BookMarked color={color} size={size} />,
           }}
         />
@@ -61,7 +64,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="user/index"
         options={{
-          title: 'User',
+          title: `${TranslateText[lan].USER}`,
           tabBarIcon: ({ color, size }) => <User color={color} size={size} />,
         }}
       />

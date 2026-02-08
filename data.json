@@ -1,0 +1,134 @@
+{
+  "English": {
+    "ALL_REGIONS": "All Regions",
+    "SELECT_REGIONS": "Select Regions",
+    "ALL_REGIONS_SELECTED": "All Regions Selected",
+    "FROM": "From"
+  },
+  "অসমীয়া": {
+    "ALL_REGIONS": "সকলো অঞ্চল",
+    "SELECT_REGIONS": "অঞ্চল বাছনি কৰক",
+    "ALL_REGIONS_SELECTED": "সকলো অঞ্চল নিৰ্বাচিত",
+    "FROM": "পৰা"
+  },
+  "বাংলা": {
+    "ALL_REGIONS": "সমস্ত অঞ্চল",
+    "SELECT_REGIONS": "অঞ্চল নির্বাচন করুন",
+    "ALL_REGIONS_SELECTED": "সমস্ত অঞ্চল নির্বাচিত",
+    "FROM": "থেকে"
+  },
+  "बर": {
+    "ALL_REGIONS": "गासै ओनसोलफोर",
+    "SELECT_REGIONS": "ओनसोल सायख’",
+    "ALL_REGIONS_SELECTED": "गासै ओनसोलफोर सायख’नाय",
+    "FROM": "निफ्राय"
+  },
+  "डोगरी": {
+    "ALL_REGIONS": "सारे इलाके",
+    "SELECT_REGIONS": "इलाके चुनो",
+    "ALL_REGIONS_SELECTED": "सारे इलाके चुने दे",
+    "FROM": "थमां"
+  },
+  "ગુજરાતી": {
+    "ALL_REGIONS": "તમામ વિસ્તારો",
+    "SELECT_REGIONS": "વિસ્તારો પસંદ કરો",
+    "ALL_REGIONS_SELECTED": "તમામ વિસ્તારો પસંદ કરેલ",
+    "FROM": "થી"
+  },
+  "हिन्दी": {
+    "ALL_REGIONS": "सभी क्षेत्र",
+    "SELECT_REGIONS": "क्षेत्र चुनें",
+    "ALL_REGIONS_SELECTED": "सभी क्षेत्र चयनित",
+    "FROM": "से"
+  },
+  "ಕನ್ನಡ": {
+    "ALL_REGIONS": "ಎಲ್ಲಾ ಪ್ರದೇಶಗಳು",
+    "SELECT_REGIONS": "ಪ್ರದೇಶಗಳನ್ನು ಆಯ್ಕೆಮಾಡಿ",
+    "ALL_REGIONS_SELECTED": "ಎಲ್ಲಾ ಪ್ರದೇಶಗಳನ್ನು ಆಯ್ಕೆಮಾಡಲಾಗಿದೆ",
+    "FROM": "ಇಂದ"
+  },
+  "कॉशुर": {
+    "ALL_REGIONS": "تَمام علاقہٕ",
+    "SELECT_REGIONS": "علاقہٕ ژارِو",
+    "ALL_REGIONS_SELECTED": "تَمام علاقہٕ ژارنہٕ آمٕتہِ",
+    "FROM": "پؠٹھہٕ"
+  },
+  "मैथिली": {
+    "ALL_REGIONS": "सभ क्षेत्र",
+    "SELECT_REGIONS": "क्षेत्र चुनू",
+    "ALL_REGIONS_SELECTED": "सभ क्षेत्र चयनित",
+    "FROM": "सं"
+  },
+  "മലയാളം": {
+    "ALL_REGIONS": "എല്ലാ മേഖലകളും",
+    "SELECT_REGIONS": "മേഖലകൾ തിരഞ്ഞെടുക്കുക",
+    "ALL_REGIONS_SELECTED": "എല്ലാ മേഖലകളും തിരഞ്ഞെടുത്തു",
+    "FROM": "മുതൽ"
+  },
+  "মৈতৈলোন": {
+    "ALL_REGIONS": "ꯂꯃꯗꯝ ꯄꯨꯝꯅꯃꯛ",
+    "SELECT_REGIONS": "ꯂꯃꯗꯝꯁꯤꯡ ꯈꯟꯕꯤꯌꯩ",
+    "ALL_REGIONS_SELECTED": "ꯂꯃꯗꯝ ꯄꯨꯝꯅꯃꯛ ꯈꯟꯒꯠꯂꯕꯥ",
+    "FROM": "ꯗꯒꯤ"
+  },
+  "मराठी": {
+    "ALL_REGIONS": "सर्व क्षेत्रे",
+    "SELECT_REGIONS": "क्षेत्रे निवडा",
+    "ALL_REGIONS_SELECTED": "सर्व क्षेत्रे निवडली आहेत",
+    "FROM": "पासून"
+  },
+  "नेपाली": {
+    "ALL_REGIONS": "सबै क्षेत्रहरू",
+    "SELECT_REGIONS": "क्षेत्रहरू छनौट गर्नुहोस्",
+    "ALL_REGIONS_SELECTED": "सबै क्षेत्रहरू चयन गरिएको",
+    "FROM": "बाट"
+  },
+  "ଓଡ଼ିଆ": {
+    "ALL_REGIONS": "ସମସ୍ତ ଅଞ୍ଚଳ",
+    "SELECT_REGIONS": "ଅଞ୍ଚଳ ଚୟନ କରନ୍ତୁ",
+    "ALL_REGIONS_SELECTED": "ସମସ୍ତ ଅଞ୍ଚଳ ଚୟନିତ",
+    "FROM": "ଠାରୁ"
+  },
+  "ਪੰਜਾਬੀ": {
+    "ALL_REGIONS": "ਸਾਰੇ ਖੇਤਰ",
+    "SELECT_REGIONS": "ਖੇਤਰ ਚੁਣੋ",
+    "ALL_REGIONS_SELECTED": "ਸਾਰੇ ਖੇਤਰ ਚੁਣੇ ਗਏ",
+    "FROM": "ਤੋਂ"
+  },
+  "संस्कृतम्": {
+    "ALL_REGIONS": "सर्वाणि क्षेत्राणि",
+    "SELECT_REGIONS": "क्षेत्राणि चिनोतु",
+    "ALL_REGIONS_SELECTED": "सर्वाणि क्षेत्राणि चयनितानि",
+    "FROM": "तः"
+  },
+  "ᱥᱟᱱᱛᱟᱲᱤ": {
+    "ALL_REGIONS": "ᱡᱚᱛᱚ ᱮᱞᱟᱠᱟ",
+    "SELECT_REGIONS": "ᱮᱞᱟକᱟ ᱵᱟᱪᱷᱟᱣ ᱢᱮ",
+    "ALL_REGIONS_SELECTED": "ᱡᱚᱛᱚ ᱮᱞᱟᱠᱟ ᱵᱟᱪᱷᱟᱣ ᱟᱠᱟᱱᱟ",
+    "FROM": "ᱠᱷᱚନ"
+  },
+  "سنڌي": {
+    "ALL_REGIONS": "تمام علائقا",
+    "SELECT_REGIONS": "علائقا چونڊيو",
+    "ALL_REGIONS_SELECTED": "تمام علائقا چونڊيل",
+    "FROM": "کان"
+  },
+  "தமிழ்": {
+    "ALL_REGIONS": "அனைத்து பிராந்தியங்கள்",
+    "SELECT_REGIONS": "பிராந்தியங்களைத் தேர்ந்தெடுக்கவும்",
+    "ALL_REGIONS_SELECTED": "அனைத்து பிராந்தியங்களும் தேர்ந்தெடுக்கப்பட்டன",
+    "FROM": "இருந்து"
+  },
+  "తెలుగు": {
+    "ALL_REGIONS": "అన్ని ప్రాంతాలు",
+    "SELECT_REGIONS": "ప్రాంతాలను ఎంచుకోండి",
+    "ALL_REGIONS_SELECTED": "అన్ని ప్రాంతాలు ఎంచుకోబడ్డాయి",
+    "FROM": "నుండి"
+  },
+  "اردو": {
+    "ALL_REGIONS": "تمام علاقے",
+    "SELECT_REGIONS": "علاقے منتخب کریں",
+    "ALL_REGIONS_SELECTED": "تمام علاقے منتخب کردہ",
+    "FROM": "سے"
+  }
+}
