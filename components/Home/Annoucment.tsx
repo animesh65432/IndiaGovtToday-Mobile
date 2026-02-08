@@ -1,4 +1,5 @@
 import { addsave, removesave } from "@/api/save";
+import SpinningLoader from "@/components/SpinningLoader";
 import { AnnouncementContext } from "@/context/Annoucment";
 import { lanContext } from "@/context/lan";
 import { User as UserContext } from "@/context/user";
@@ -8,9 +9,9 @@ import { TranslateText } from "@/lib/translatetext";
 import { AnnouncementType } from "@/types";
 import { useRouter } from 'expo-router';
 import { ArrowRight, Bookmark, Clock, Landmark, X } from 'lucide-react-native';
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { Toast } from "toastify-react-native";
+import { Toast, } from "toastify-react-native";
 
 type Props = {
     announcement: AnnouncementType;
@@ -24,6 +25,8 @@ type Props = {
 const Announcement: React.FC<Props> = ({ SetIsRemoved, IsRemoved, announcement, setShowAuthCard, IsSavedbuttonShown = true }) => {
     const router = useRouter();
     const { lan } = useContext(lanContext);
+    const [IsSaveLoading, SetIsSaveLoading] = useState(false);
+    const [IsRemoveLoading, SetIsRemoveLoading] = useState(false);
     const { DoesItadd, SetDoesItadd } = useContext(AnnouncementContext);
     const { isLoggedIn, token, } = useContext(UserContext);
 
@@ -33,12 +36,22 @@ const Announcement: React.FC<Props> = ({ SetIsRemoved, IsRemoved, announcement, 
             return
         }
         else {
-            const response = await addsave(token, announcement.announcementId) as Response;
-            if (response.status === 200) {
-                Toast.success("Announcement added to saved list");
-                if (SetDoesItadd) {
-                    SetDoesItadd(!DoesItadd)
+            SetIsSaveLoading(true);
+            try {
+                const response = await addsave(token, announcement.announcementId) as Response;
+                if (response.status === 200) {
+                    Toast.success("Announcement added to saved list");
+                    if (SetDoesItadd) {
+                        SetDoesItadd(!DoesItadd)
+                    }
                 }
+            }
+            catch (error) {
+                console.error("Error saving announcement:", error);
+                Toast.error("Failed to save announcement. Please try again.");
+            }
+            finally {
+                SetIsSaveLoading(false);
             }
         }
 
@@ -50,11 +63,21 @@ const Announcement: React.FC<Props> = ({ SetIsRemoved, IsRemoved, announcement, 
             return
         }
         else {
-            await removesave(token, announcement.announcementId);
-            if (SetIsRemoved) {
-                SetIsRemoved(!IsRemoved)
+            SetIsRemoveLoading(true);
+            try {
+                await removesave(token, announcement.announcementId);
+                if (SetIsRemoved) {
+                    SetIsRemoved(!IsRemoved)
+                }
+                Toast.success("Announcement removed from saved list");
             }
-            Toast.success("Announcement removed from saved list");
+            catch (error) {
+                console.error("Error removing saved announcement:", error);
+                Toast.error("Failed to remove saved announcement. Please try again.");
+            }
+            finally {
+                SetIsRemoveLoading(false);
+            }
         }
     };
 
@@ -66,8 +89,13 @@ const Announcement: React.FC<Props> = ({ SetIsRemoved, IsRemoved, announcement, 
                         <Text style={styles.departmentText}>{announcement.department}</Text>
                     </View>
                     {IsSavedbuttonShown ?
-                        <Bookmark size={20} color="black" onPress={handleBookmark} /> :
-                        <X size={20} color="black" onPress={handleRemoveBookmark} />
+                        (IsSaveLoading ? <SpinningLoader size={20} color="black" /> :
+                            <Bookmark size={20} color="black" onPress={handleBookmark} />
+                        )
+                        :
+                        (IsRemoveLoading ? <SpinningLoader size={20} color="black" /> :
+                            <X size={20} color="black" onPress={handleRemoveBookmark} />
+                        )
                     }
                 </View>
 

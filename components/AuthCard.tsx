@@ -3,7 +3,6 @@ import { User } from "@/context/user";
 import { TranslateText } from "@/lib/translatetext";
 import React, { useContext } from 'react';
 import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Toast } from "toastify-react-native";
 
 type Props = {
     showAuthCard: boolean;
@@ -18,12 +17,10 @@ const AuthCard: React.FC<Props> = ({ showAuthCard, setShowAuthCard }) => {
         try {
             SignIn();
             setShowAuthCard(false);
-            Toast.success("Sign-in successful!");
         } catch (error) {
             console.error('Error during sign-in:', error);
         }
     }
-
 
     return (
         <Modal

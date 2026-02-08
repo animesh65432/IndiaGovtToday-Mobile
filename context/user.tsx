@@ -1,11 +1,10 @@
 import { singinwithgoogle } from "@/api/user";
-import { GoogleClientId } from "@/config/index";
+import { GoogleClientId } from "@/config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as Google from 'expo-auth-session/providers/google';
 import * as WebBrowser from 'expo-web-browser';
 import React, { createContext, useEffect, useState } from "react";
 import { Toast } from "toastify-react-native";
-
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -40,11 +39,12 @@ export const UserProvider: React.FC<Props> = ({ children }) => {
         token: "",
     });
 
-    const [request, response, promptAsync] = Google.useAuthRequest({
-        webClientId: GoogleClientId,
-        androidClientId: GoogleClientId,
-        iosClientId: GoogleClientId,
-    });
+    const [request, response, promptAsync] = Google.useAuthRequest(
+        {
+            clientId: GoogleClientId,
+            redirectUri: 'https://auth.expo.io/@animesh2002/IndiaGovtToday',
+        }
+    );
 
     const GetUserProfileFromCache = async () => {
         try {
@@ -57,7 +57,6 @@ export const UserProvider: React.FC<Props> = ({ children }) => {
             console.error("Error fetching user profile from cache:", error);
         }
     }
-
 
     const fetchUserInfo = async (accessToken: string) => {
         try {
@@ -74,7 +73,10 @@ export const UserProvider: React.FC<Props> = ({ children }) => {
                 token: ""
             };
 
-            const authresponse = await singinwithgoogle(userProfile.name, userProfile.email) as {
+            const authresponse = await singinwithgoogle(
+                userProfile.name,
+                userProfile.email
+            ) as {
                 token: string;
                 message: string;
             };
@@ -88,6 +90,7 @@ export const UserProvider: React.FC<Props> = ({ children }) => {
             Toast.success(authresponse.message);
         } catch (error) {
             console.error("Error fetching user info:", error);
+            Toast.error("Failed to get user info");
         }
     };
 
@@ -95,13 +98,22 @@ export const UserProvider: React.FC<Props> = ({ children }) => {
         GetUserProfileFromCache();
     }, [])
 
-
     useEffect(() => {
+        console.log('🔍 Response type:', response?.type);
+        console.log('🔍 Response:', response);
+
         if (response?.type === 'success') {
             const { authentication } = response;
             if (authentication?.accessToken) {
+                console.log('✅ Got access token!');
                 fetchUserInfo(authentication.accessToken);
             }
+        } else if (response?.type === 'error') {
+            console.error('❌ Auth error:', response.error);
+            Toast.error('Sign in failed: ' + response.error?.message);
+        } else if (response?.type === 'cancel') {
+            console.log('⚠️ Sign in cancelled');
+            Toast.info('Sign in cancelled');
         }
     }, [response]);
 
@@ -115,6 +127,7 @@ export const UserProvider: React.FC<Props> = ({ children }) => {
                 pofilepicture: "",
                 token: "",
             });
+            Toast.success('Signed out successfully');
         }
         catch (error) {
             console.error("Error signing out:", error);
@@ -123,10 +136,13 @@ export const UserProvider: React.FC<Props> = ({ children }) => {
 
     const SignIn = async () => {
         try {
-            await promptAsync();
+            console.log('🚀 Starting Google Sign In...');
+            const result = await promptAsync();
+            console.log('📥 Prompt result:', result);
         }
         catch (error) {
             console.error("Error signing in:", error);
+            Toast.error("Sign in failed");
         }
     }
 
