@@ -1,12 +1,20 @@
 import { singinwithgoogle } from "@/api/user";
-import { GoogleClientId } from "@/config";
+import { IOS_CLIENT_ID, WEB_CLIENT_ID } from "@/config";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import * as Google from 'expo-auth-session/providers/google';
-import * as WebBrowser from 'expo-web-browser';
+import {
+    GoogleSignin,
+    isErrorWithCode,
+    isSuccessResponse,
+    statusCodes
+} from '@react-native-google-signin/google-signin';
 import React, { createContext, useEffect, useState } from "react";
 import { Toast } from "toastify-react-native";
 
-WebBrowser.maybeCompleteAuthSession();
+GoogleSignin.configure({
+    webClientId: WEB_CLIENT_ID,
+    iosClientId: IOS_CLIENT_ID,
+    offlineAccess: true,
+});
 
 export const User = createContext({
     name: "Guest",
@@ -14,6 +22,7 @@ export const User = createContext({
     isLoggedIn: false,
     pofilepicture: "",
     token: "",
+    IsLoading: false,
     SignOut: () => { },
     SignIn: () => { },
 })
@@ -38,13 +47,7 @@ export const UserProvider: React.FC<Props> = ({ children }) => {
         pofilepicture: "",
         token: "",
     });
-
-    const [request, response, promptAsync] = Google.useAuthRequest(
-        {
-            clientId: GoogleClientId,
-            redirectUri: 'https://auth.expo.io/@animesh2002/IndiaGovtToday',
-        }
-    );
+    const [isLoading, setIsLoading] = useState(false);
 
     const GetUserProfileFromCache = async () => {
         try {
@@ -52,74 +55,103 @@ export const UserProvider: React.FC<Props> = ({ children }) => {
             if (cachedUser) {
                 setUser(JSON.parse(cachedUser));
             }
-        }
-        catch (error) {
+        } catch (error) {
             console.error("Error fetching user profile from cache:", error);
         }
     }
 
-    const fetchUserInfo = async (accessToken: string) => {
-        try {
-            const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-                headers: { Authorization: `Bearer ${accessToken}` },
-            });
-            const userInfo = await response.json();
-
-            const userProfile: UserProfile = {
-                name: userInfo.name ?? "Guest",
-                email: userInfo.email ?? "",
-                isLoggedIn: true,
-                pofilepicture: userInfo.picture ?? "",
-                token: ""
-            };
-
-            const authresponse = await singinwithgoogle(
-                userProfile.name,
-                userProfile.email
-            ) as {
-                token: string;
-                message: string;
-            };
-
-            await AsyncStorage.setItem("userProfile", JSON.stringify(
-                { ...userProfile, token: authresponse.token }
-            ));
-
-            setUser({ ...userProfile, token: authresponse.token });
-
-            Toast.success(authresponse.message);
-        } catch (error) {
-            console.error("Error fetching user info:", error);
-            Toast.error("Failed to get user info");
-        }
-    };
-
     useEffect(() => {
         GetUserProfileFromCache();
-    }, [])
+    }, []);
 
-    useEffect(() => {
-        console.log('🔍 Response type:', response?.type);
-        console.log('🔍 Response:', response);
+    const SignIn = async () => {
+        setIsLoading(true);
+        try {
+            console.log('🚀 Starting Google Sign In...');
 
-        if (response?.type === 'success') {
-            const { authentication } = response;
-            if (authentication?.accessToken) {
-                console.log('✅ Got access token!');
-                fetchUserInfo(authentication.accessToken);
+            // Check if play services are available
+            await GoogleSignin.hasPlayServices();
+
+            // Sign in
+            const response = await GoogleSignin.signIn();
+
+            if (isSuccessResponse(response)) {
+                const { user } = response.data;
+
+                console.log('✅ User Info:', user);
+
+                // Create user profile
+                const userProfile: UserProfile = {
+                    name: user.name || "Guest",
+                    email: user.email || "",
+                    isLoggedIn: true,
+                    pofilepicture: user.photo || "",
+                    token: ""
+                };
+
+                // Send to your backend
+                const authresponse = await singinwithgoogle(
+                    userProfile.name,
+                    userProfile.email
+                ) as {
+                    token: string;
+                    message: string;
+                };
+
+                // Save to AsyncStorage
+                const completeProfile = {
+                    ...userProfile,
+                    token: authresponse.token
+                };
+
+                await AsyncStorage.setItem("userProfile", JSON.stringify(completeProfile));
+
+
+                setUser(completeProfile);
+
+                Toast.success(authresponse.message || 'Signed in successfully');
+            } else {
+                Toast.info('Sign in cancelled');
             }
-        } else if (response?.type === 'error') {
-            console.error('❌ Auth error:', response.error);
-            Toast.error('Sign in failed: ' + response.error?.message);
-        } else if (response?.type === 'cancel') {
-            console.log('⚠️ Sign in cancelled');
-            Toast.info('Sign in cancelled');
+
+        } catch (error: any) {
+            if (isErrorWithCode(error)) {
+                switch (error.code) {
+                    case statusCodes.SIGN_IN_CANCELLED:
+                        console.log('User cancelled sign in');
+                        Toast.info('Sign in cancelled');
+                        break;
+
+                    case statusCodes.IN_PROGRESS:
+                        console.log('Sign in already in progress');
+                        Toast.info('Sign in already in progress');
+                        break;
+
+                    case statusCodes.PLAY_SERVICES_NOT_AVAILABLE:
+                        console.log('Play services not available');
+                        Toast.error('Google Play Services not available');
+                        break;
+                    default:
+                        console.log('Unknown error code:', error.code);
+                        Toast.error('Sign in failed: ' + error.message);
+                }
+            } else {
+                Toast.error('Sign in failed: ' + (error.message || 'Unknown error'));
+            }
+        } finally {
+            setIsLoading(false);
         }
-    }, [response]);
+    }
 
     const SignOut = async () => {
         try {
+            // Sign out from Google
+            await GoogleSignin.signOut();
+
+            // Clear AsyncStorage
             await AsyncStorage.removeItem("userProfile");
+
+            // Reset state
             setUser({
                 name: "Guest",
                 email: "",
@@ -127,30 +159,22 @@ export const UserProvider: React.FC<Props> = ({ children }) => {
                 pofilepicture: "",
                 token: "",
             });
+
             Toast.success('Signed out successfully');
-        }
-        catch (error) {
+        } catch (error) {
             console.error("Error signing out:", error);
+            Toast.error('Sign out failed');
         }
     }
 
-    const SignIn = async () => {
-        try {
-            console.log('🚀 Starting Google Sign In...');
-            const result = await promptAsync();
-            console.log('📥 Prompt result:', result);
-        }
-        catch (error) {
-            console.error("Error signing in:", error);
-            Toast.error("Sign in failed");
-        }
-    }
-
-    return <User.Provider value={{
-        ...user,
-        SignOut,
-        SignIn,
-    }}>
-        {children}
-    </User.Provider>
+    return (
+        <User.Provider value={{
+            ...user,
+            IsLoading: isLoading,
+            SignOut,
+            SignIn,
+        }}>
+            {children}
+        </User.Provider>
+    )
 }

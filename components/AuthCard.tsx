@@ -1,8 +1,9 @@
 import { lanContext } from "@/context/lan";
 import { User } from "@/context/user";
 import { TranslateText } from "@/lib/translatetext";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 import React, { useContext } from 'react';
-import { Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 type Props = {
     showAuthCard: boolean;
@@ -10,15 +11,15 @@ type Props = {
 }
 
 const AuthCard: React.FC<Props> = ({ showAuthCard, setShowAuthCard }) => {
-    const { SignIn } = useContext(User);
+    const { SignIn, IsLoading } = useContext(User);
     const { lan } = useContext(lanContext)
 
     const handleSignIn = async () => {
         try {
-            SignIn();
+            await SignIn();
+        }
+        finally {
             setShowAuthCard(false);
-        } catch (error) {
-            console.error('Error during sign-in:', error);
         }
     }
 
@@ -38,10 +39,26 @@ const AuthCard: React.FC<Props> = ({ showAuthCard, setShowAuthCard }) => {
 
                     <View style={styles.buttonContainer}>
                         <TouchableOpacity
-                            style={styles.signInButton}
+                            style={styles.googleButtonOfficial}
                             onPress={handleSignIn}
+                            disabled={IsLoading}
                         >
-                            <Text style={styles.signInText}>{TranslateText[lan].SIGN_IN}</Text>
+                            {IsLoading ? (
+                                <ActivityIndicator color="#1a1a1a" />
+                            ) : (
+                                <>
+                                    <View style={styles.googleLogoContainer}>
+                                        <MaterialCommunityIcons
+                                            name="google"
+                                            size={20}
+                                            color="#3c4043"
+                                        />
+                                    </View>
+                                    <Text style={styles.googleButtonTextOfficial}>
+                                        {TranslateText[lan].SIGN_IN}
+                                    </Text>
+                                </>
+                            )}
                         </TouchableOpacity>
 
                         <TouchableOpacity
@@ -123,6 +140,37 @@ const styles = StyleSheet.create({
         fontFamily: 'Poppins_500Medium',
         fontSize: 16,
         color: '#666666',
+    },
+    googleButtonOfficial: {
+        backgroundColor: '#FFD700',
+        paddingVertical: 12,
+        paddingHorizontal: 16,
+        borderRadius: 8,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderWidth: 1,
+        borderColor: '#dadce0',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.1,
+        shadowRadius: 1,
+        elevation: 2,
+    },
+    googleLogoContainer: {
+        width: 24,
+        height: 24,
+        marginRight: 12,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    googleButtonTextOfficial: {
+        fontFamily: 'Poppins_500Medium',
+        fontSize: 14,
+        color: '#3c4043',
     },
 });
 
