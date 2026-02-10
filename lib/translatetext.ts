@@ -2165,7 +2165,7 @@ export const TranslateText: Record<string, TranslationKeys> = {
             { label: "পুডুচেৰী", value: "পুডুচেৰী" },
             { label: "ইণ্ডিয়ান গভৰ্ণমেণ্ট", value: "ইণ্ডিয়ান গভৰ্ণমেণ্ট" }
         ],
-        PUBLIC_NOTIFICATION: "হুতাশন / ৰাজহুৱা জাননী",
+        PUBLIC_NOTIFICATION: "হুতাশন ৰাজহুৱা জাননী",
         DIRECT_ACCESS_TO_VERIFIED_GOVT_CIRCULARS: "সত্যাপিত চৰকাৰী পৰিপত্ৰসমূহলৈ পোনপটীয়া প্ৰৱেশ",
         PAGE: "পৃষ্ঠা",
         OF: "ৰ ভিতৰত",

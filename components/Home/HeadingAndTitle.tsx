@@ -11,7 +11,7 @@ const HeadingAndTitle: React.FC = () => {
             <View style={styles.TextTitleAndDes}>
                 <View style={styles.Titles}>
                     <Text style={styles.HeadingText}>{TranslateText[lan].PUBLIC_NOTIFICATION.split(" ")[0]}</Text>
-                    <Text style={styles.HeadingText}>{TranslateText[lan].PUBLIC_NOTIFICATION.split(" ")[1]}</Text>
+                    <Text style={styles.HeadingText}>{TranslateText[lan].PUBLIC_NOTIFICATION.split(" ").slice(1,).join(" ")}</Text>
                 </View>
                 <TextGenerateEffect
                     words={TranslateText[lan].DIRECT_ACCESS_TO_VERIFIED_GOVT_CIRCULARS}
