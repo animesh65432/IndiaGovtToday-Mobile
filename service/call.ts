@@ -51,7 +51,7 @@ export async function Call<T, ResponseType>({
 
     try {
         const response: AxiosResponse<ResponseType> = await axios(config);
-        return response.data;
+        return response.data
     } catch (error: unknown) {
         const errMsg = "Something went wrong.";
         if (!suppressError) {
@@ -73,6 +73,7 @@ export async function Call<T, ResponseType>({
             } else if (error.request) {
                 console.error("Error Request:", error.request);
             } else {
+                Toast.error(error.message);
                 console.error("Error Message:", error.message);
             }
         }

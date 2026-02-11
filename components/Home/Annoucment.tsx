@@ -38,17 +38,8 @@ const Announcement: React.FC<Props> = ({ SetIsRemoved, IsRemoved, announcement, 
         else {
             SetIsSaveLoading(true);
             try {
-                const response = await addsave(token, announcement.announcementId) as Response;
-                if (response.status === 200) {
-                    Toast.success("Announcement added to saved list");
-                    if (SetDoesItadd) {
-                        SetDoesItadd(!DoesItadd)
-                    }
-                }
-            }
-            catch (error) {
-                console.error("Error saving announcement:", error);
-                Toast.error("Failed to save announcement. Please try again.");
+                await addsave(token, announcement.announcementId) as Response;
+                SetDoesItadd(!DoesItadd)
             }
             finally {
                 SetIsSaveLoading(false);
@@ -65,15 +56,11 @@ const Announcement: React.FC<Props> = ({ SetIsRemoved, IsRemoved, announcement, 
         else {
             SetIsRemoveLoading(true);
             try {
-                await removesave(token, announcement.announcementId);
+                await removesave(announcement.announcementId, token) as Response;
                 if (SetIsRemoved) {
                     SetIsRemoved(!IsRemoved)
                 }
                 Toast.success("Announcement removed from saved list");
-            }
-            catch (error) {
-                console.error("Error removing saved announcement:", error);
-                Toast.error("Failed to remove saved announcement. Please try again.");
             }
             finally {
                 SetIsRemoveLoading(false);

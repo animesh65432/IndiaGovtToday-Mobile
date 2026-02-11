@@ -66,7 +66,7 @@ const Save = () => {
     }
 
     useEffect(() => {
-        fetchSavedAnnouncements(false, page, totalPages, lan);
+        fetchSavedAnnouncements(false, page, 10, lan);
     }, [token, IsRemoved, DoesItadd, lan])
 
     return (
