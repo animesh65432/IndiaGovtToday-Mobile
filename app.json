@@ -9,13 +9,13 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.animesh2002.IndiaGovtToday",
+      "bundleIdentifier": "com.dutta12.IndiaGovtToday",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false
       }
     },
     "android": {
-      "package": "com.animesh2002.IndiaGovtToday",
+      "package": "com.dutta12.IndiaGovtToday",
       "adaptiveIcon": {
         "foregroundImage": "./assets/app-icon-foreground.png",
         "backgroundColor": "#FFFFFF"
@@ -50,7 +50,7 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "c2612dbc-be87-4744-955d-ad34f82bcf6f"
+        "projectId": "d79dd74e-ec98-44f6-8e5b-195b6693db9d"
       }
     }
   }

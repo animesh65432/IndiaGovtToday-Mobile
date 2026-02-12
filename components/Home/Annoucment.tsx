@@ -39,6 +39,7 @@ const Announcement: React.FC<Props> = ({ SetIsRemoved, IsRemoved, announcement, 
             SetIsSaveLoading(true);
             try {
                 await addsave(token, announcement.announcementId) as Response;
+                Toast.success("Announcement added to saved list");
                 SetDoesItadd(!DoesItadd)
             }
             finally {
